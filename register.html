@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="images/logo2.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="images/logo2.jpg">
+    <link rel="apple-touch-icon" href="images/logo2.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register — Student Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --red:    #8b0000;
+            --red-lt: #a31515;
+            --gold:   #c8a951;
+            --gold-lt:#e8c96a;
+            --dark:   #1e293b;
+            --gray:   #64748b;
+            --border: #e2e8f0;
+            --cream:  #fdf8f0;
+        }
+        body { font-family: 'Lato', sans-serif; background: #1a0000; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* ── TOPBAR ── */
+        .topbar { background: var(--red); color: white; font-size: .73rem; padding: .35rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .4rem; border-bottom: 2px solid var(--gold); }
+        .topbar a { color: var(--gold-lt); text-decoration: none; }
+        .topbar-right { display: flex; gap: 1.5rem; }
+        .topbar-left { opacity: .8; }
+
+        /* ── NAVBAR ── */
+        .navbar { background: white; border-bottom: 3px solid var(--gold); display: flex; align-items: center; justify-content: space-between; padding: .6rem 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.18); position: sticky; top: 0; z-index: 100; }
+        .nav-brand { display: flex; align-items: center; gap: .85rem; text-decoration: none; }
+        .nav-logo { width: 52px; height: 52px; border-radius: 50%; background: var(--red); border: 2.5px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 800; font-size: .78rem; color: var(--gold); text-align: center; line-height: 1.2; overflow: hidden; }
+        .nav-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .nav-name strong { display: block; font-family: 'Playfair Display', serif; font-size: .92rem; color: var(--red); font-weight: 700; }
+        .nav-name small { font-size: .68rem; color: var(--gray); display: block; }
+        .nav-links { display: flex; gap: .15rem; align-items: center; }
+        .nav-links a { color: var(--dark); text-decoration: none; font-size: .8rem; font-weight: 700; padding: .45rem .8rem; border-radius: 4px; text-transform: uppercase; letter-spacing: .4px; transition: background .2s, color .2s; }
+        .nav-links a:hover { background: var(--red); color: white; }
+        .nav-links a.active { background: var(--red); color: white; }
+        .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: .3rem; flex-direction: column; gap: 5px; }
+        .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--dark); border-radius: 2px; transition: all .3s ease; }
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .nav-mobile-drawer {
+            display: none; flex-direction: column;
+            background: white; border-bottom: 3px solid var(--red);
+            box-shadow: 0 4px 12px rgba(0,0,0,.1);
+            padding: .5rem 1rem .75rem;
+            position: sticky; top: 65px; z-index: 99;
+        }
+        .nav-mobile-drawer.open { display: flex; }
+        .nav-mobile-drawer a {
+            color: var(--dark); text-decoration: none;
+            font-size: .85rem; font-weight: 700;
+            padding: .6rem .75rem; border-radius: 5px;
+            text-transform: uppercase; letter-spacing: .4px;
+            transition: background .2s, color .2s;
+        }
+        .nav-mobile-drawer a:hover,
+        .nav-mobile-drawer a.active { background: var(--red); color: white; }
+        .nav-mobile-drawer .nav-enroll { background: var(--gold) !important; color: var(--dark) !important; margin-top: .25rem; }
+
+        /* ── MAIN ── */
+        .main-wrap { flex: 1; display: flex; min-height: 0; }
+
+        /* ── HERO ── */
+        .hero-side { flex: 1.1; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(135deg, #2d0000 0%, #8b0000 60%, #4a0000 100%); }
+        .hero-side::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.52); z-index: 1; }
+        .hero-bg { position: absolute; inset: 0; background-image: url('images/scc4.png'); background-size: cover; background-position: center; opacity: 0.4; }
+        .hero-content { position: relative; z-index: 10; padding: 3rem; color: white; }
+        .hero-tag { display: inline-block; background: var(--gold); color: var(--dark); font-size: .68rem; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; padding: .28rem .8rem; border-radius: 3px; margin-bottom: 1rem; }
+        .gold-bar { width: 48px; height: 3px; background: var(--gold); border-radius: 2px; margin-bottom: 1rem; }
+        .hero-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.6rem); font-weight: 800; line-height: 1.15; text-shadow: 0 2px 12px rgba(0,0,0,0.6); margin-bottom: .6rem; }
+        .hero-content h1 em { color: var(--gold-lt); font-style: italic; }
+        .hero-content p { font-size: .88rem; opacity: .8; line-height: 1.65; max-width: 380px; margin-bottom: 1.5rem; }
+        .hero-steps { display: flex; flex-direction: column; gap: .65rem; margin-top: 1.5rem; }
+        .hero-step { display: flex; align-items: center; gap: .75rem; font-size: .82rem; color: rgba(255,255,255,0.82); }
+        .hero-step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--gold); color: var(--dark); display: flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 900; flex-shrink: 0; }
+
+        /* ── REGISTER SIDE ── */
+        .reg-side { width: 480px; flex-shrink: 0; background: var(--cream); display: flex; flex-direction: column; overflow-y: auto; }
+        .reg-head { background: var(--red); padding: 1.5rem 2rem 1.2rem; text-align: center; border-bottom: 4px solid var(--gold); display: block; overflow: hidden; }
+        .reg-logo { width: 64px; height: 64px; border-radius: 50%; background: white; border: 3px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 800; font-size: .9rem; color: var(--red); margin: 0 auto .7rem; text-align: center; line-height: 1.2; overflow: hidden; }
+        .reg-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .reg-head h2 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: white; font-weight: 700; margin-bottom: .2rem; display: block; }
+        .reg-head p { font-size: .72rem; color: rgba(255,255,255,0.65); display: block; }
+        .reg-body { flex: 1; padding: 1.5rem 2rem 2rem; }
+
+        /* ── PROGRESS ── */
+        .progress-bar { display: flex; align-items: center; margin-bottom: 1.4rem; }
+        .prog-step { display: flex; flex-direction: column; align-items: center; gap: .28rem; flex: 1; }
+        .prog-num { width: 28px; height: 28px; border-radius: 50%; background: var(--border); color: var(--gray); display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 900; position: relative; z-index: 1; transition: all .3s; }
+        .prog-step.active .prog-num { background: var(--red); color: white; box-shadow: 0 0 0 3px rgba(139,0,0,0.15); }
+        .prog-step.done .prog-num { background: var(--gold); color: var(--dark); }
+        .prog-label { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--gray); }
+        .prog-step.active .prog-label { color: var(--red); }
+        .prog-step.done .prog-label { color: var(--dark); }
+        .prog-line { flex: 1; height: 2px; background: var(--border); margin-bottom: 1.15rem; transition: background .3s; }
+        .prog-line.done { background: var(--gold); }
+
+        /* ── ALERTS ── */
+        .alert { padding: .8rem 1rem; border-radius: 8px; font-size: .82rem; margin-bottom: 1rem; line-height: 1.5; }
+        .alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+        /* ── FORM ── */
+        .section-title { font-size: .67rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: var(--red); margin: 1.2rem 0 .8rem; padding-bottom: .38rem; border-bottom: 2px solid var(--gold); }
+        .section-title:first-of-type { margin-top: 0; }
+        .form-group { margin-bottom: .9rem; }
+        .form-label { display: block; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--dark); margin-bottom: .32rem; }
+        .label-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .32rem; }
+        .label-row .form-label { margin-bottom: 0; }
+        .form-input,
+        .form-select { width: 100%; padding: .68rem .9rem; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Lato', sans-serif; font-size: .875rem; color: var(--dark); background: white; transition: border-color .2s, box-shadow .2s; appearance: none; -webkit-appearance: none; }
+        .form-input:focus,
+        .form-select:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(139,0,0,0.1); }
+        .form-input::placeholder { color: #b0b8c4; }
+        .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23666' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .9rem center; padding-right: 2.5rem; cursor: pointer; }
+        .form-select.ready { border-color: var(--red); }
+        .form-select:disabled { background-color: #f5f5f5; color: #aaa; cursor: not-allowed; }
+        .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; }
+
+        /* ── HINTS / BADGES ── */
+        .count-badge { display: none; background: #fff8e6; color: #78350f; border: 1px solid var(--gold); font-size: .67rem; font-weight: 700; padding: .1rem .5rem; border-radius: .8rem; }
+        .count-badge.show { display: inline-block; }
+        .spinner-row { display: none; align-items: center; gap: .45rem; font-size: .76rem; color: var(--gray); margin-top: .3rem; }
+        .spinner-row.show { display: flex; }
+        .spinner { width: 13px; height: 13px; border: 2px solid #e5e7eb; border-top-color: var(--red); border-radius: 50%; animation: spin .7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .field-hint { font-size: .74rem; margin-top: .3rem; padding: .38rem .65rem; border-radius: 6px; display: none; line-height: 1.5; }
+        .field-hint.show { display: block; }
+        .hint-info    { background: #fff8e6; color: #78350f; border: 1px solid rgba(200,169,81,0.4); }
+        .hint-warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .hint-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+        /* ── PASSWORD STRENGTH ── */
+        .pass-input-wrap { position: relative; }
+        .pass-input-wrap .form-input { padding-right: 2.6rem; }
+        .pass-eye {
+            position: absolute; right: .7rem; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer; padding: 4px;
+            color: #aaa; display: flex; align-items: center; justify-content: center;
+            transition: color .2s; line-height: 1;
+        }
+        .pass-eye:hover { color: var(--red); }
+        .pass-eye svg { width: 18px; height: 18px; display: block; }
+        .pass-strength { height: 3px; border-radius: 2px; background: #eee; margin: 4px 0 2px; overflow: hidden; }
+        .pass-strength-bar { height: 100%; width: 0; border-radius: 2px; transition: width .3s, background .3s; }
+        .pass-hint { font-size: .68rem; color: var(--gray); min-height: 1em; }
+
+        /* ── TERMS ── */
+        .terms-row { display: flex; align-items: flex-start; gap: .55rem; cursor: pointer; }
+        .terms-row input[type="checkbox"] { width: auto; margin-top: .18rem; accent-color: var(--red); flex-shrink: 0; }
+        .terms-row span { font-size: .8rem; color: var(--gray); line-height: 1.6; }
+        .terms-row a { color: var(--red); font-weight: 700; text-decoration: none; }
+
+        /* ── BUTTON ── */
+        .btn-register { width: 100%; background: var(--red); color: white; border: none; padding: .88rem; border-radius: 8px; font-family: 'Lato', sans-serif; font-size: .92rem; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; transition: background .2s, transform .1s, box-shadow .2s; margin-top: .5rem; }
+        .btn-register:hover { background: var(--red-lt); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(139,0,0,0.38); }
+        .btn-register:disabled { opacity: .7; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* ── INFO BOX ── */
+        .info-box { background: #fff8e6; border: 1px solid var(--gold); border-radius: 8px; padding: .8rem 1rem; margin-top: 1rem; font-size: .76rem; color: #78350f; line-height: 1.65; }
+        .info-box strong { display: block; color: var(--red); margin-bottom: .25rem; font-size: .78rem; }
+
+        /* ── REG FOOTER ── */
+        .reg-footer { text-align: center; padding-top: 1rem; border-top: 1px solid var(--border); font-size: .8rem; color: var(--gray); margin-top: 1.2rem; line-height: 1.9; }
+        .reg-footer a { color: var(--red); font-weight: 700; text-decoration: none; }
+
+        /* ── PAGE FOOTER ── */
+        .page-footer { background: var(--red); border-top: 3px solid var(--gold); padding: .85rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+        .page-footer p { font-size: .72rem; color: rgba(255,255,255,0.5); }
+        .page-footer a { font-size: .72rem; color: var(--gold-lt); text-decoration: none; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .hero-side { display: none; }
+            .reg-side { width: 100%; max-width: 100%; }
+            .main-wrap { display: block; }
+            .navbar { padding: .6rem 1rem; }
+            .nav-links { display: none; }
+            .nav-hamburger { display: flex; }
+            .topbar { display: none; }
+        }
+        @media (max-width: 600px) {
+            .topbar { padding: .35rem 1rem; }
+            .reg-head { padding: 2rem 1rem 1.2rem; }
+            .reg-head h2 { font-size: 1rem; }
+            .reg-logo { width: 56px; height: 56px; margin-bottom: .6rem; }
+            .reg-body { padding: 1.2rem 1rem 2rem; }
+
+            /* Progress bar — keep circles visible, shrink labels */
+            .progress-bar { margin-bottom: 1.2rem; gap: 0; }
+            .prog-step { gap: .2rem; }
+            .prog-num {
+                width: 30px; height: 30px;
+                font-size: .75rem;
+                border: 2px solid var(--border);
+            }
+            .prog-step.active .prog-num { border-color: var(--red); }
+            .prog-step.done .prog-num { border-color: var(--gold); }
+            .prog-label { font-size: .58rem; letter-spacing: 0; }
+            .prog-line { margin-bottom: 1.3rem; }
+
+            /* Stack the 2-column rows on small screens */
+            .form-row-2 { grid-template-columns: 1fr; gap: 0; }
+
+            /* Slightly smaller inputs */
+            .form-input,
+            .form-select { font-size: .85rem; padding: .65rem .85rem; }
+            .form-label { font-size: .67rem; }
+            .section-title { font-size: .65rem; }
+
+            /* Button full-width tap target */
+            .btn-register { padding: .92rem; font-size: .9rem; }
+
+            .page-footer { flex-direction: column; align-items: center; text-align: center; padding: .85rem 1rem; }
+
+            /* Info box */
+            .info-box { font-size: .74rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <span class="topbar-left"><span id="brandNameTopbar">St. Cecilia's College-Cebu, Inc.</span> &mdash; Student Registration Portal</span>
+    <div class="topbar-right">
+        <a href="login.html">Login</a>
+        <a href="#">Contact</a>
+    </div>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="nav-brand">
+        <div class="nav-logo">
+            <img id="brandLogoNav" src="images/logo2.jpg" alt="School Logo" onerror="this.style.display='none'">
+            SCC
+        </div>
+        <div class="nav-name">
+            <strong id="brandNameNav">St. Cecilia's College</strong>
+            <small>Cebu, Inc.</small>
+        </div>
+    </a>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html" class="active">Register</a>
+    </div>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<div class="nav-mobile-drawer" id="navMobileDrawer">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About Us</a>
+    <a href="login.html">Login</a>
+    <a href="register.html" class="active">Register</a>
+    <a href="enrollment.html" class="nav-enroll">Enroll Now</a>
+</div>
+
+<div class="main-wrap">
+
+    <!-- HERO SIDE -->
+    <div class="hero-side">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <span class="hero-tag">New Student</span>
+            <div class="gold-bar"></div>
+            <h1>Begin Your <em>Journey</em><br>at <span id="brandNameHero">St. Cecilia's</span></h1>
+            <p>Create your student account to access enrollment, grades, schedules, and all academic services in one place.</p>
+            <div class="hero-steps">
+                <div class="hero-step">
+                    <div class="hero-step-num">1</div>
+                    <span>Fill in your personal &amp; academic details</span>
+                </div>
+                <div class="hero-step">
+                    <div class="hero-step-num">2</div>
+                    <span>Create your account credentials</span>
+                </div>
+                <div class="hero-step">
+                    <div class="hero-step-num">3</div>
+                    <span>Await Registrar approval, then log in</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTER SIDE -->
+    <div class="reg-side">
+        <div class="reg-head">
+            <div class="reg-logo">
+                <img id="brandLogoHead" src="images/logo2.jpg" alt="School Logo" onerror="this.style.display='none'">
+                <span id="brandLogoFallback">SCC</span>
+            </div>
+            <h2>Student Registration</h2>
+            <p>Create your account to begin enrollment</p>
+        </div>
+
+        <div class="reg-body">
+
+            <!-- Progress -->
+            <div class="progress-bar">
+                <div class="prog-step active" id="prog1">
+                    <div class="prog-num">1</div>
+                    <div class="prog-label">Personal</div>
+                </div>
+                <div class="prog-line" id="line1"></div>
+                <div class="prog-step" id="prog2">
+                    <div class="prog-num">2</div>
+                    <div class="prog-label">Academic</div>
+                </div>
+                <div class="prog-line" id="line2"></div>
+                <div class="prog-step" id="prog3">
+                    <div class="prog-num">3</div>
+                    <div class="prog-label">Account</div>
+                </div>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <form id="registerForm" novalidate>
+
+                <!-- Personal Info -->
+                <div class="section-title">&#128100; Personal Information</div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Juan Dela Cruz" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="student_id">Student ID / LRN *</label>
+                        <input type="text" id="student_id" name="student_id" class="form-input" placeholder="2024-00001" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="student@school.edu" required autocomplete="email">
+                </div>
+
+                <!-- Academic Info -->
+                <div class="section-title">&#127979; Academic Information</div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <div class="label-row">
+                            <label class="form-label" for="course">Course / Program *</label>
+                            <span id="courseLoadingBadge" class="count-badge">Loading…</span>
+                        </div>
+                        <select id="course" name="course" class="form-select" required onchange="onCourseChange()" disabled>
+                            <option value="">Loading courses…</option>
+                        </select>
+                        <div class="field-hint" id="courseHint"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="year_level">Year Level *</label>
+                        <select id="year_level" name="year_level" class="form-select" required onchange="fetchSections()">
+                            <option value="">Select Year</option>
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label class="form-label" for="section_id">Section *</label>
+                        <span id="sectionCountBadge" class="count-badge"></span>
+                    </div>
+                    <select id="section_id" name="section_id" class="form-select" disabled>
+                        <option value="">— Select Course &amp; Year Level first —</option>
+                    </select>
+                    <div class="spinner-row" id="sectionSpinner">
+                        <div class="spinner"></div><span>Loading available sections…</span>
+                    </div>
+                    <div class="field-hint" id="sectionHint"></div>
+                </div>
+
+                <!-- Account Setup -->
+                <div class="section-title">&#128274; Account Setup</div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password *</label>
+                        <div class="pass-input-wrap">
+                            <input type="password" id="password" name="password" class="form-input" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password" oninput="checkPasswordStrength(this.value)">
+                            <button type="button" class="pass-eye" onclick="togglePass('password', this)" aria-label="Show password" tabindex="-1">
+                                <svg id="eye-password" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                        <div class="pass-strength"><div class="pass-strength-bar" id="passBar"></div></div>
+                        <div class="pass-hint" id="passHint"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="confirm_password">Confirm Password *</label>
+                        <div class="pass-input-wrap">
+                            <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="Re-enter password" required autocomplete="new-password">
+                            <button type="button" class="pass-eye" onclick="togglePass('confirm_password', this)" aria-label="Show confirm password" tabindex="-1">
+                                <svg id="eye-confirm_password" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="terms-row">
+                        <input type="checkbox" name="terms" required>
+                        <span>I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a> of <span id="brandNameTerms">St. Cecilia's College-Cebu, Inc.</span></span>
+                    </label>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-register">Create Account</button>
+            </form>
+
+            <div class="info-box">
+                <strong>&#8505; After Registration</strong>
+                Your account will be reviewed by the Registrar's Office. You will be notified once approved. For assistance, visit the Registrar or the MIS Office.
+            </div>
+
+            <div class="reg-footer">
+                Already have an account? <a href="login.html">Login here</a><br>
+                <a href="index.html">&#8592; Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer class="page-footer">
+    <p>&copy; 2025 <span id="brandNameFooter">St. Cecilia's College-Cebu, Inc.</span> All rights reserved.</p>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+    </div>
+</footer>
+
+<script>
+function showHint(id, type, text) {
+    const el = document.getElementById(id);
+    el.className = `field-hint show hint-${type}`;
+    el.textContent = text;
+}
+function hideHint(id) {
+    const el = document.getElementById(id);
+    el.className = 'field-hint';
+    el.textContent = '';
+}
+function setBadge(id, text) {
+    const el = document.getElementById(id);
+    if (text) { el.textContent = text; el.classList.add('show'); }
+    else { el.classList.remove('show'); }
+}
+function setSpinner(on) {
+    document.getElementById('sectionSpinner').classList.toggle('show', on);
+}
+function updateProgress(step) {
+    for (let i = 1; i <= 3; i++) {
+        const p = document.getElementById('prog' + i);
+        p.className = 'prog-step' + (i < step ? ' done' : i === step ? ' active' : '');
+    }
+    document.getElementById('line1').className = 'prog-line' + (step > 1 ? ' done' : '');
+    document.getElementById('line2').className = 'prog-line' + (step > 2 ? ' done' : '');
+}
+function checkPasswordStrength(val) {
+    const bar = document.getElementById('passBar');
+    const hint = document.getElementById('passHint');
+    if (!val) { bar.style.width = '0'; hint.textContent = ''; return; }
+    let score = 0;
+    if (val.length >= 8)  score++;
+    if (val.length >= 12) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const levels = [
+        { w: '20%', c: '#e74c3c', t: 'Too weak' },
+        { w: '40%', c: '#e67e22', t: 'Weak' },
+        { w: '60%', c: '#f1c40f', t: 'Fair' },
+        { w: '80%', c: '#2ecc71', t: 'Strong' },
+        { w: '100%', c: '#27ae60', t: 'Very strong' },
+    ];
+    const l = levels[Math.min(score - 1, 4)] || levels[0];
+    bar.style.width = l.w; bar.style.background = l.c;
+    hint.textContent = l.t; hint.style.color = l.c;
+}
+async function loadCourses() {
+    const sel = document.getElementById('course');
+    const badge = document.getElementById('courseLoadingBadge');
+    badge.textContent = 'Loading…'; badge.classList.add('show');
+    const fallback = ['Computer Science','Information Technology','Business Administration','Engineering','Education','Nursing'];
+    try {
+        const res  = await fetch('api/shared/get_courses_public.php');
+        const data = await res.json();
+        sel.innerHTML = '<option value="">— Select Course / Program —</option>';
+        if (!data.success || data.courses.length === 0) {
+            fallback.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
+            showHint('courseHint', 'warning', 'Showing default courses. Contact Registrar if yours is missing.');
+            badge.classList.remove('show');
+        } else {
+            data.courses.forEach(c => {
+                const o = document.createElement('option');
+                o.value = c.course_name; o.dataset.code = c.course_code; o.dataset.duration = c.duration_years;
+                o.textContent = `${c.course_name} (${c.course_code})`; sel.appendChild(o);
+            });
+            setBadge('courseLoadingBadge', `${data.courses.length} programs`);
+            showHint('courseHint', 'info', `${data.courses.length} active program(s) available.`);
+        }
+        sel.disabled = false; sel.classList.add('ready');
+    } catch (e) {
+        sel.innerHTML = '<option value="">— Select Course / Program —</option>';
+        fallback.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
+        sel.disabled = false;
+        showHint('courseHint', 'warning', 'Could not connect to database. Showing default list.');
+        badge.classList.remove('show');
+    }
+}
+function onCourseChange() {
+    const sel = document.getElementById('course');
+    const opt = sel.options[sel.selectedIndex];
+    if (!sel.value) { hideHint('courseHint'); }
+    else {
+        const code = opt.dataset.code ? ` (${opt.dataset.code})` : '';
+        const dur  = opt.dataset.duration ? ` · ${opt.dataset.duration}-year program` : '';
+        showHint('courseHint', 'success', `Selected: ${sel.value}${code}${dur}`);
+    }
+    const duration = parseInt(opt.dataset.duration) || 4;
+    const yearSel  = document.getElementById('year_level');
+    const labels   = ['1st Year','2nd Year','3rd Year','4th Year','5th Year','6th Year'];
+    yearSel.innerHTML = '<option value="">Select Year</option>';
+    for (let i = 0; i < Math.min(duration, labels.length); i++) {
+        const o = document.createElement('option'); o.value = labels[i]; o.textContent = labels[i]; yearSel.appendChild(o);
+    }
+    fetchSections();
+    updateProgress(2);
+}
+let abortCtrl = null;
+async function fetchSections() {
+    const course    = document.getElementById('course').value;
+    const yearLevel = document.getElementById('year_level').value;
+    const sel       = document.getElementById('section_id');
+    sel.innerHTML = '<option value="">— loading… —</option>';
+    sel.disabled = true; sel.classList.remove('ready');
+    setBadge('sectionCountBadge', null); hideHint('sectionHint');
+    if (!course || !yearLevel) {
+        sel.innerHTML = '<option value="">— Select Course &amp; Year Level first —</option>'; return;
+    }
+    if (abortCtrl) abortCtrl.abort();
+    abortCtrl = new AbortController();
+    setSpinner(true);
+    try {
+        const qs  = new URLSearchParams({ course, year_level: yearLevel });
+        const res = await fetch(`php/api/get_sections_public.php?${qs}`, { signal: abortCtrl.signal });
+        const data = await res.json();
+        setSpinner(false);
+        if (!data.success || data.sections.length === 0) {
+            sel.innerHTML = '<option value="">— No sections available —</option>';
+            sel.disabled = true; sel.removeAttribute('required');
+            showHint('sectionHint', 'warning', `No sections found for ${yearLevel} – ${course}. Contact the Registrar.`);
+            return;
+        }
+        sel.innerHTML = '<option value="">— Select your section —</option>';
+        data.sections.forEach(s => {
+            const o = document.createElement('option');
+            o.value = s.id; o.dataset.code = s.section_code; o.dataset.name = s.section_name;
+            o.dataset.semester = s.semester || ''; o.dataset.sy = s.school_year || '';
+            let label = `${s.section_name} (${s.section_code})`;
+            if (s.semester)    label += ` · ${s.semester}`;
+            if (s.school_year) label += ` · ${s.school_year}`;
+            o.textContent = label; sel.appendChild(o);
+        });
+        sel.disabled = false; sel.setAttribute('required', ''); sel.classList.add('ready');
+        const cnt = data.sections.length;
+        setBadge('sectionCountBadge', `${cnt} available`);
+        showHint('sectionHint', 'success', `${cnt} section(s) found. Please choose yours.`);
+    } catch (err) {
+        if (err.name === 'AbortError') return;
+        setSpinner(false);
+        sel.innerHTML = '<option value="">— Error loading sections —</option>';
+        showHint('sectionHint', 'warning', 'Could not load sections. Please refresh and try again.');
+    }
+}
+document.getElementById('section_id').addEventListener('change', function () {
+    if (!this.value) { hideHint('sectionHint'); return; }
+    const opt = this.options[this.selectedIndex];
+    const extra = [opt.dataset.semester, opt.dataset.sy].filter(Boolean).join(' · ');
+    showHint('sectionHint', 'info', `Section: ${opt.dataset.name} (${opt.dataset.code})${extra ? '  ·  ' + extra : ''}`);
+    updateProgress(3);
+});
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const alertBox  = document.getElementById('alertContainer');
+    const formData  = new FormData(e.target);
+    const submitBtn = document.getElementById('submitBtn');
+    alertBox.innerHTML = '';
+    if (formData.get('password') !== formData.get('confirm_password')) {
+        alertBox.innerHTML = '<div class="alert alert-error">Passwords do not match. Please re-enter.</div>';
+        document.getElementById('confirm_password').focus(); return;
+    }
+    const sectionSel = document.getElementById('section_id');
+    if (!sectionSel.disabled && !sectionSel.value) {
+        alertBox.innerHTML = '<div class="alert alert-error">Please select your section.</div>';
+        sectionSel.focus(); return;
+    }
+    submitBtn.disabled = true; submitBtn.textContent = 'Registering…';
+    try {
+        const response = await fetch('php/register.php', { method: 'POST', body: formData });
+        const result   = await response.json();
+        if (result.success) {
+            alertBox.innerHTML = `<div class="alert alert-success">Registration successful! Your account is pending Registrar approval.<br><small>Redirecting to login…</small></div>`;
+            updateProgress(3);
+            setTimeout(() => { window.location.href = 'login.html'; }, 2500);
+        } else {
+            alertBox.innerHTML = `<div class="alert alert-error">${result.message}</div>`;
+            submitBtn.disabled = false; submitBtn.textContent = 'Create Account';
+        }
+    } catch (err) {
+        alertBox.innerHTML = '<div class="alert alert-error">An error occurred. Please check your connection and try again.</div>';
+        submitBtn.disabled = false; submitBtn.textContent = 'Create Account';
+    }
+});
+loadCourses();
+</script>
+<script>
+// ── Dynamic Branding (school name + logo from admin settings) ─────────
+(async function applyBranding() {
+    try {
+        const res  = await fetch('api/shared/get_branding_public.php');
+        const data = await res.json();
+        if (!data.success) return;
+
+        const name = data.school_name || '';
+        const logo = data.school_logo || '';
+
+        // Update all text elements
+        ['brandNameNav','brandNameTopbar','brandNameFooter','brandNameHero','brandNameTerms'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el && name) el.textContent = name;
+        });
+
+        // Update page title
+        if (name) document.title = 'Register — ' + name;
+
+        // Update logo images
+        if (logo) {
+            ['brandLogoNav','brandLogoHead'].forEach(id => {
+                const img = document.getElementById(id);
+                if (img) { img.src = logo; img.alt = name + ' Logo'; img.style.display = ''; }
+            });
+            // Hide text fallback when logo loads
+            const fb = document.getElementById('brandLogoFallback');
+            if (fb) fb.style.display = 'none';
+        }
+    } catch (e) { /* silently keep defaults */ }
+})();
+</script>
+
+<script>
+    function togglePass(fieldId, btn) {
+        const input = document.getElementById(fieldId);
+        const svg = document.getElementById('eye-' + fieldId);
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+        // Swap icon: open eye vs eye-off
+        if (isHidden) {
+            svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+        } else {
+            svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        }
+        btn.style.color = isHidden ? 'var(--red)' : '';
+    }
+
+    // Mobile nav toggle
+    (function() {
+        const hamburger = document.getElementById('navHamburger');
+        const drawer = document.getElementById('navMobileDrawer');
+        if (!hamburger || !drawer) return;
+        hamburger.addEventListener('click', () => {
+            const open = drawer.classList.toggle('open');
+            hamburger.classList.toggle('open', open);
+            hamburger.setAttribute('aria-expanded', open);
+        });
+        drawer.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                drawer.classList.remove('open');
+                hamburger.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    })();
+</script>
+</body>
+</html>

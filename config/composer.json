@@ -1,0 +1,13 @@
+{
+    "name": "scc/school-management",
+    "description": "SCC School Management System",
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "psr-4": {}
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}

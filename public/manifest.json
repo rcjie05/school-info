@@ -1,0 +1,42 @@
+{
+  "name": "Saint Cecilia College - School Management",
+  "short_name": "SCC Portal",
+  "description": "Saint Cecilia College School Management System",
+  "start_url": "/login.html",
+  "display": "standalone",
+  "background_color": "#1E3352",
+  "theme_color": "#1E3352",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "HR Dashboard",
+      "short_name": "HR",
+      "description": "Go to HR Dashboard",
+      "url": "/hr/dashboard.php",
+      "icons": [{ "src": "images/logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Admin Dashboard",
+      "short_name": "Admin",
+      "description": "Go to Admin Dashboard",
+      "url": "/admin/dashboard.php",
+      "icons": [{ "src": "images/logo.png", "sizes": "192x192" }]
+    }
+  ]
+}

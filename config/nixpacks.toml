@@ -1,0 +1,15 @@
+# nixpacks.toml — Railway auto-deployment config
+# This is an ALTERNATIVE to the Dockerfile. Railway will use whichever it finds first.
+# Delete this file if you want to use the Dockerfile instead.
+
+[phases.setup]
+nixPkgs = ["php82", "php82Extensions.mysqli", "php82Extensions.pdo", "php82Extensions.pdo_mysql", "php82Extensions.gd", "php82Extensions.mbstring", "php82Extensions.opcache", "apacheHttpd"]
+
+[phases.build]
+cmds = [
+  "mkdir -p uploads",
+  "chmod 775 uploads"
+]
+
+[start]
+cmd = "apache2ctl -D FOREGROUND"

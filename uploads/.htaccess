@@ -1,0 +1,11 @@
+# Prevent PHP (and other server-side scripts) from executing inside this folder.
+# Even if a malicious file is uploaded, it cannot be run as code.
+
+<FilesMatch "\.(php|php\d|phtml|phar|shtml|cgi|pl|py|rb|asp|aspx|jsp)$">
+    Require all denied
+</FilesMatch>
+
+# Only allow safe image/document file types to be served
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|pdf|doc|docx)$">
+    Require all granted
+</FilesMatch>

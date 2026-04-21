@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Floor Plan API Diagnostic Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        h1 { color: #333; }
+        .test-section { margin: 20px 0; padding: 15px; background: #f9f9f9; border-left: 4px solid #4CAF50; }
+        .result { padding: 10px; margin: 10px 0; border-radius: 4px; font-family: monospace; white-space: pre-wrap; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Floor Plan API Diagnostic Test</h1>
+        <p>This page tests the API directly to diagnose why students can't see routes.</p>
+        
+        <div class="test-section">
+            <h2>Test 1: Check Session</h2>
+            <button onclick="testSession()">Run Test</button>
+            <div id="sessionResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 2: Load Routes from API</h2>
+            <button onclick="testLoadRoutes()">Run Test</button>
+            <div id="routesResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 3: Check JavaScript Variables</h2>
+            <button onclick="testJSVariables()">Run Test</button>
+            <div id="jsResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 4: Direct Database Query</h2>
+            <p>Run this in phpMyAdmin:</p>
+            <pre>SELECT id, name, visible_to_students, start_room, end_room 
+FROM floor_plan_routes 
+WHERE visible_to_students = 1;</pre>
+            <p>Expected: Should return 2 rows (Chapel to AVP office, HR to Clinic)</p>
+        </div>
+    </div>
+
+    <script>
+        async function testSession() {
+            const result = document.getElementById('sessionResult');
+            result.innerHTML = '<div class="result info">Testing...</div>';
+            
+            try {
+                const response = await fetch('../../api/shared/test.php');
+                const text = await response.text();
+                
+                result.innerHTML = `
+                    <div class="result success">
+                        <strong>✓ Session Test Result:</strong><br>
+                        ${text.replace(/\n/g, '<br>')}
+                    </div>
+                `;
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="result error">
+                        <strong>✗ Error:</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        async function testLoadRoutes() {
+            const result = document.getElementById('routesResult');
+            result.innerHTML = '<div class="result info">Loading routes...</div>';
+            
+            try {
+                // Detect the correct base path from current location
+                const pathParts = window.location.pathname.split('/');
+                const basePath = pathParts.find(part => part.includes('school-management')) || '';
+                const apiPath = basePath 
+                    ? `/${basePath}/php/api/routes.php`
+                    : '/php/api/routes.php';
+                
+                console.log('Base path detected:', basePath);
+                console.log('Fetching from:', apiPath);
+                
+                const response = await fetch(apiPath, {
+                    credentials: 'include'
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                const data = await response.json();
+                
+                console.log('Response data:', data);
+                
+                let html = `
+                    <div class="result ${data.success ? 'success' : 'error'}">
+                        <strong>${data.success ? '✓' : '✗'} API Response:</strong><br>
+                        Success: ${data.success}<br>
+                        Routes Count: ${data.routes ? data.routes.length : 0}<br>
+                        ${data.debug ? `Debug Info: ${JSON.stringify(data.debug)}<br>` : ''}
+                        ${data.message ? `Message: ${data.message}<br>` : ''}
+                    </div>
+                    <div class="result info">
+                        <strong>Routes Data:</strong><br>
+                        <pre>${JSON.stringify(data.routes, null, 2)}</pre>
+                    </div>
+                `;
+                
+                if (data.routes && data.routes.length > 0) {
+                    html += '<div class="result success"><strong>✓ Routes Found!</strong><br>';
+                    data.routes.forEach(route => {
+                        html += `
+                            - ${route.name} (${route.startRoom} → ${route.endRoom})<br>
+                            &nbsp;&nbsp;Visible: ${route.visibleToStudents}<br>
+                        `;
+                    });
+                    html += '</div>';
+                } else {
+                    html += '<div class="result error"><strong>✗ No routes returned!</strong></div>';
+                }
+                
+                result.innerHTML = html;
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="result error">
+                        <strong>✗ Error:</strong><br>
+                        ${error.message}<br>
+                        <pre>${error.stack}</pre>
+                    </div>
+                `;
+            }
+        }
+        
+        function testJSVariables() {
+            const result = document.getElementById('jsResult');
+            
+            // Detect the correct base path
+            const pathParts = window.location.pathname.split('/');
+            const basePath = pathParts.find(part => part.includes('school-management')) || '';
+            const apiPath = basePath 
+                ? `/${basePath}/php/api/routes.php`
+                : '/php/api/routes.php';
+            
+            const info = {
+                'window.currentUserRole': window.currentUserRole || 'undefined',
+                'window.canEditRoutes': window.canEditRoutes || 'undefined',
+                'currentRole (if defined)': typeof currentRole !== 'undefined' ? currentRole : 'NOT DEFINED',
+                'savedRoutes (if defined)': typeof savedRoutes !== 'undefined' ? savedRoutes : 'NOT DEFINED',
+                'Location pathname': window.location.pathname,
+                'Detected base path': basePath || 'none',
+                'API path': apiPath
+            };
+            
+            let html = '<div class="result info"><strong>JavaScript Variables:</strong><br>';
+            for (const [key, value] of Object.entries(info)) {
+                html += `${key}: <strong>${JSON.stringify(value)}</strong><br>`;
+            }
+            html += '</div>';
+            
+            result.innerHTML = html;
+        }
+        
+        // Auto-run tests on load
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Diagnostic page loaded');
+        });
+    </script>
+    <script src="../../../public/js/theme-switcher.js"></script>
+</body>
+</html>

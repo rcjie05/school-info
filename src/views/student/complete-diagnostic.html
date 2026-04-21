@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complete Floor Plan Diagnostic</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1e1e1e; color: #d4d4d4; }
+        .test { margin: 20px 0; padding: 15px; background: #252526; border-left: 4px solid #007acc; }
+        .pass { border-left-color: #4ec9b0; }
+        .fail { border-left-color: #f48771; }
+        .warn { border-left-color: #dcdcaa; }
+        h2 { color: #4ec9b0; margin-top: 0; }
+        pre { background: #1e1e1e; padding: 10px; overflow-x: auto; }
+        button { padding: 10px 20px; background: #0e639c; color: white; border: none; cursor: pointer; margin: 5px; }
+        button:hover { background: #1177bb; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Complete Floor Plan Diagnostic</h1>
+    <p>This will test EVERYTHING to find out why routes aren't displaying.</p>
+    
+    <button onclick="runAllTests()">🚀 Run All Tests</button>
+    <button onclick="location.reload()">🔄 Refresh Page</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function runAllTests() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h2>Running tests...</h2>';
+            
+            let html = '';
+            
+            // Test 1: Check if we can access the API
+            html += await test1();
+            
+            // Test 2: Check what the API returns
+            html += await test2();
+            
+            // Test 3: Test the actual student page
+            html += await test3();
+            
+            // Test 4: Check file paths
+            html += test4();
+            
+            results.innerHTML = html;
+        }
+        
+        async function test1() {
+            let html = '<div class="test">';
+            html += '<h2>Test 1: Direct API Access</h2>';
+            
+            try {
+                const pathParts = window.location.pathname.split('/');
+                const basePath = pathParts.find(part => part.includes('school-management')) || '';
+                const apiPath = basePath 
+                    ? `/${basePath}/php/api/routes.php`
+                    : '/php/api/routes.php';
+                
+                html += `<p>API Path: <strong>${apiPath}</strong></p>`;
+                
+                const response = await fetch(apiPath, { credentials: 'include' });
+                html += `<p>Status: <strong>${response.status}</strong></p>`;
+                
+                const data = await response.json();
+                html += `<p>Success: <strong>${data.success}</strong></p>`;
+                html += `<p>Routes Count: <strong>${data.routes ? data.routes.length : 0}</strong></p>`;
+                
+                if (data.routes && data.routes.length > 0) {
+                    html += '<p class="pass">✅ API is working and returning routes!</p>';
+                    html += '<pre>' + JSON.stringify(data.routes, null, 2) + '</pre>';
+                } else {
+                    html += '<p class="fail">❌ API returns no routes!</p>';
+                }
+                
+                html += '</div>';
+                return html;
+            } catch (error) {
+                html += `<p class="fail">❌ Error: ${error.message}</p></div>`;
+                return html;
+            }
+        }
+        
+        async function test2() {
+            let html = '<div class="test">';
+            html += '<h2>Test 2: Load floor-script.js</h2>';
+            
+            try {
+                const pathParts = window.location.pathname.split('/');
+                const basePath = pathParts.find(part => part.includes('school-management')) || '';
+                const scriptPath = basePath 
+                    ? `/${basePath}/js/floor-script.js`
+                    : '/js/floor-script.js';
+                
+                html += `<p>Script Path: <strong>${scriptPath}</strong></p>`;
+                
+                const response = await fetch(scriptPath);
+                const scriptText = await response.text();
+                
+                html += `<p>Script Size: <strong>${scriptText.length} bytes</strong></p>`;
+                
+                // Check for the canvas bug
+                if (scriptText.includes('const canvas = document.getElementById')) {
+                    html += '<p class="fail">❌ OLD VERSION DETECTED! Canvas bug still present!</p>';
+                    html += '<p>The script has: <code>const canvas = document.getElementById</code></p>';
+                    html += '<p>It should have: <code>let canvas;</code> (without assignment)</p>';
+                } else if (scriptText.includes('let canvas;') && scriptText.includes('canvas = document.getElementById')) {
+                    html += '<p class="pass">✅ NEW VERSION DETECTED! Canvas bug fixed!</p>';
+                } else {
+                    html += '<p class="warn">⚠️ Unable to determine version</p>';
+                }
+                
+                // Check for dynamic path detection
+                if (scriptText.includes('pathParts.find(part => part.includes(\'school-management\'))')) {
+                    html += '<p class="pass">✅ Dynamic path detection present!</p>';
+                } else {
+                    html += '<p class="fail">❌ Old hardcoded path still present!</p>';
+                }
+                
+                html += '</div>';
+                return html;
+            } catch (error) {
+                html += `<p class="fail">❌ Error loading script: ${error.message}</p></div>`;
+                return html;
+            }
+        }
+        
+        async function test3() {
+            let html = '<div class="test">';
+            html += '<h2>Test 3: Student Page HTML</h2>';
+            
+            try {
+                const pathParts = window.location.pathname.split('/');
+                const basePath = pathParts.find(part => part.includes('school-management')) || '';
+                const pagePath = basePath 
+                    ? `/${basePath}/student/floorplan.php`
+                    : '/student/floorplan.php';
+                
+                const response = await fetch(pagePath);
+                const pageText = await response.text();
+                
+                html += `<p>Page Path: <strong>${pagePath}</strong></p>`;
+                html += `<p>Page Size: <strong>${pageText.length} bytes</strong></p>`;
+                
+                // Check if studentRoutesList exists
+                if (pageText.includes('id="studentRoutesList"')) {
+                    html += '<p class="pass">✅ studentRoutesList element exists in HTML</p>';
+                } else {
+                    html += '<p class="fail">❌ studentRoutesList element MISSING!</p>';
+                }
+                
+                // Check if script is loaded with version parameter
+                if (pageText.includes('floor-script.js?v=')) {
+                    html += '<p class="pass">✅ Script has version parameter (cache busting)</p>';
+                } else {
+                    html += '<p class="warn">⚠️ Script loaded without version parameter (may use cache)</p>';
+                }
+                
+                html += '</div>';
+                return html;
+            } catch (error) {
+                html += `<p class="fail">❌ Error: ${error.message}</p></div>`;
+                return html;
+            }
+        }
+        
+        function test4() {
+            let html = '<div class="test">';
+            html += '<h2>Test 4: Current Environment</h2>';
+            
+            const pathParts = window.location.pathname.split('/');
+            const basePath = pathParts.find(part => part.includes('school-management')) || '';
+            
+            html += `<p>Current URL: <strong>${window.location.href}</strong></p>`;
+            html += `<p>Pathname: <strong>${window.location.pathname}</strong></p>`;
+            html += `<p>Detected Base Path: <strong>${basePath || 'none'}</strong></p>`;
+            html += `<p>Expected API Path: <strong>/${basePath}/php/api/routes.php</strong></p>`;
+            html += `<p>Expected Script Path: <strong>/${basePath}/js/floor-script.js</strong></p>`;
+            
+            html += '</div>';
+            return html;
+        }
+        
+        // Auto-run on load
+        window.addEventListener('load', () => {
+            runAllTests();
+        });
+    </script>
+    <script src="../../../public/js/theme-switcher.js"></script>
+</body>
+</html>

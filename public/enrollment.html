@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enrollment Form — Student Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --crimson:  #7a0000;
+  --crimson2: #5c0000;
+  --gold:     #b8922a;
+  --gold-lt:  #e8d08a;
+  --cream:    #faf9f6;
+  --ink:      #1c1917;
+  --muted:    #78716c;
+  --border:   #e5e0d8;
+  --card-bg:  #ffffff;
+  --page-bg:  #f5f3ef;
+  --radius:   10px;
+  --shadow:   0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--page-bg);min-height:100vh;color:var(--ink);}
+
+/* ─── Layout ─── */
+.portal-wrap{max-width:820px;margin:0 auto;padding:0 20px 60px;}
+.top-bar{display:flex;align-items:center;gap:12px;padding:24px 0 20px;}
+.btn-back{display:flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px 14px;border-radius:8px;font-size:13px;font-family:inherit;cursor:pointer;transition:all .18s;}
+.btn-back:hover{border-color:#c0b8ac;color:var(--ink);}
+.btn-print{margin-left:auto;display:flex;align-items:center;gap:7px;background:var(--crimson);border:none;color:#fff;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .18s;letter-spacing:.2px;}
+.btn-print:hover{background:var(--crimson2);box-shadow:0 4px 16px rgba(122,0,0,.25);}
+
+/* ─── Hero ─── */
+.hero{text-align:center;padding:32px 20px 28px;border-bottom:1px solid var(--border);margin-bottom:24px;}
+.hero-eyebrow{display:inline-block;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.hero-school{font-family:'Lora',serif;font-size:26px;font-weight:600;color:var(--ink);line-height:1.2;margin-bottom:4px;}
+.hero-dept{font-size:12px;color:var(--muted);margin-bottom:2px;letter-spacing:.3px;}
+.hero-subtitle{font-size:13px;font-weight:500;color:var(--crimson);letter-spacing:.8px;text-transform:uppercase;margin-top:8px;}
+
+/* ─── Info alert ─── */
+.info-alert{display:flex;align-items:flex-start;gap:10px;background:#fffbf0;border:1px solid #f0e0a0;border-radius:8px;padding:11px 14px;margin-bottom:20px;}
+.info-alert-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;margin-top:5px;flex-shrink:0;}
+.info-alert p{font-size:12.5px;color:#6b5a2a;line-height:1.55;}
+.info-alert strong{color:#4a3c14;}
+
+/* ─── Section heading ─── */
+.section-label{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.section-label-icon{width:22px;height:22px;background:var(--crimson);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.section-label h3{font-size:11px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);}
+
+/* ─── Cards ─── */
+.card{background:var(--card-bg);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow);animation:fadeUp .35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.card:nth-child(1){animation-delay:.04s;}.card:nth-child(2){animation-delay:.08s;}.card:nth-child(3){animation-delay:.12s;}.card:nth-child(4){animation-delay:.16s;}.card:nth-child(5){animation-delay:.2s;}.card:nth-child(6){animation-delay:.24s;}.card:nth-child(7){animation-delay:.28s;}
+.card-body{padding:20px;}
+.card-divider{height:1px;background:var(--border);margin:16px 0;}
+
+/* ─── Fields ─── */
+.field-grid{display:grid;gap:12px;}
+.fg-2{grid-template-columns:1fr 1fr;}
+.fg-3{grid-template-columns:1fr 1fr 1fr;}
+.fg-4{grid-template-columns:repeat(4,1fr);}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);}
+.field input,.field select{height:38px;padding:0 11px;background:#fff;border:1px solid var(--border);border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;color:var(--ink);outline:none;transition:border-color .18s,box-shadow .18s;appearance:none;-webkit-appearance:none;}
+.field input:focus,.field select:focus{border-color:var(--crimson);box-shadow:0 0 0 3px rgba(122,0,0,.08);}
+.field input::placeholder{color:#bbb;}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23aaa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:30px;}
+.field-span-2{grid-column:span 2;}.field-span-3{grid-column:span 3;}.field-span-4{grid-column:span 4;}
+
+/* ─── Academic status toggle ─── */
+.acad-toggle{display:flex;background:#f4f0ea;border-radius:7px;padding:3px;gap:3px;}
+.acad-btn{flex:1;padding:7px;border-radius:5px;border:none;background:transparent;font-size:13px;font-family:inherit;cursor:pointer;transition:all .15s;font-weight:500;color:var(--muted);}
+.acad-btn.active{background:#fff;color:var(--crimson);box-shadow:0 1px 3px rgba(0,0,0,.08);font-weight:600;}
+
+/* ─── Type pills ─── */
+.type-row{display:flex;flex-wrap:wrap;gap:7px;}
+.type-pill{position:relative;}
+.type-pill input[type=radio]{position:absolute;opacity:0;pointer-events:none;}
+.type-pill label{display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:100px;border:1px solid var(--border);background:#fff;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;color:var(--muted);}
+.type-pill label::before{content:'';width:7px;height:7px;border-radius:50%;border:1.5px solid #ccc;flex-shrink:0;transition:all .15s;}
+.type-pill input:checked+label{background:var(--crimson);border-color:var(--crimson);color:#fff;}
+.type-pill input:checked+label::before{background:var(--gold-lt);border-color:var(--gold-lt);}
+
+/* ─── Shiftee row ─── */
+.shiftee-row{display:flex;align-items:center;gap:8px;margin-top:14px;}
+.shiftee-row .sep{font-size:13px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+.shiftee-row .field{flex:1;}
+
+/* ─── ID field inline ─── */
+.id-row{margin-top:14px;display:flex;align-items:flex-end;gap:12px;}
+.id-row .field{max-width:200px;}
+
+/* ─── Checklist ─── */
+.checklist{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.check-item{display:flex;align-items:center;gap:9px;cursor:pointer;padding:8px 10px;border-radius:7px;border:1px solid var(--border);background:#fff;transition:all .15s;user-select:none;}
+.check-item:hover{border-color:#c0b8ac;}
+.check-item input[type=checkbox]{display:none;}
+.check-box{width:16px;height:16px;flex-shrink:0;border:1.5px solid #d0c8bc;border-radius:4px;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:10px;}
+.check-item input:checked~.check-box{background:var(--crimson);border-color:var(--crimson);color:#fff;}
+.check-item input:checked~.check-box::after{content:'✓';}
+.check-item span{font-size:12.5px;color:var(--ink);}
+
+/* ─── Subject table ─── */
+.subj-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border);}
+table.subj-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.subj-table thead th{padding:9px 8px;background:#f8f5f0;color:var(--muted);font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-align:center;border-bottom:1px solid var(--border);border-right:1px solid var(--border);}
+.subj-table thead th:last-child{border-right:none;}
+.subj-table thead tr.th2 th{background:#f3efe8;padding:6px 8px;}
+.subj-table tbody tr{border-bottom:1px solid var(--border);}
+.subj-table tbody tr:last-child{border-bottom:none;}
+.subj-table tbody tr:hover{background:#faf8f5;}
+.subj-table td{padding:2px 4px;vertical-align:middle;text-align:center;border-right:1px solid var(--border);}
+.subj-table td:nth-child(2){text-align:left;}
+.subj-table td:last-child{border-right:none;}
+.subj-table td input{width:100%;height:30px;border:1px solid transparent;border-radius:5px;background:transparent;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;color:var(--ink);text-align:center;outline:none;transition:all .15s;padding:0 4px;}
+.subj-table td:nth-child(2) input{text-align:left;padding-left:8px;}
+.subj-table td input:focus{border-color:var(--crimson);background:rgba(122,0,0,.03);}
+.subj-table tfoot tr{border-top:2px solid var(--border);background:#faf8f4;}
+.subj-table tfoot td{padding:8px 12px;font-size:12px;font-weight:600;color:var(--muted);text-align:right;}
+.total-val{display:inline-block;min-width:40px;color:var(--crimson);font-weight:700;}
+
+/* ─── Signature ─── */
+.sig-row{display:flex;justify-content:flex-end;margin-top:16px;}
+.sig-block{text-align:center;}
+.sig-line{height:36px;border-bottom:1.5px solid #c0b8ac;min-width:220px;margin-bottom:5px;}
+.sig-label{font-size:11px;color:var(--muted);}
+
+/* ─── Submit bar ─── */
+.submit-bar{display:flex;justify-content:flex-end;gap:8px;padding:20px 0 0;}
+.btn-submit{padding:11px 28px;background:var(--crimson);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .18s;box-shadow:0 2px 12px rgba(122,0,0,.2);}
+.btn-submit:hover{background:var(--crimson2);box-shadow:0 6px 20px rgba(122,0,0,.3);transform:translateY(-1px);}
+.btn-submit:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+.btn-submit-ghost{padding:11px 20px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .18s;}
+.btn-submit-ghost:hover{border-color:#c0b8ac;color:var(--ink);}
+
+/* Success Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(28,25,23,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-card{background:#fff;border-radius:14px;padding:32px 28px;max-width:400px;width:100%;text-align:center;transform:translateY(16px);transition:transform .25s;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.modal-overlay.open .modal-card{transform:translateY(0);}
+.modal-icon{width:48px;height:48px;background:#f0faf5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px;}
+.modal-title{font-family:'Lora',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+.modal-msg{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.modal-ref{display:inline-block;background:#f8f4ed;border:1px solid #e0d5c0;border-radius:7px;padding:7px 18px;font-size:12.5px;color:var(--crimson);font-weight:600;margin-bottom:20px;letter-spacing:.5px;}
+.modal-btns{display:flex;gap:8px;justify-content:center;}
+.modal-btn-p{padding:9px 22px;background:var(--crimson);border:none;border-radius:7px;color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;}
+.modal-btn-o{padding:9px 18px;background:transparent;border:1px solid var(--border);border-radius:7px;color:var(--muted);font-size:13px;font-family:inherit;cursor:pointer;}
+
+/* Error */
+.field input.err,.field select.err{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.1);}
+
+/* Guardian sub-section */
+.sub-heading{font-size:10.5px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--crimson);padding-top:4px;}
+
+/* Print-only (unchanged — keeps full print functionality) */
+.print-only{display:none!important;}
+
+@media print {
+  .screen-only{display:none!important;}
+  body{background:white!important;padding:0!important;font-family:'Times New Roman',Times,serif;}
+  body::before{display:none!important;}
+  .print-only{display:block!important;}
+  .print-a4{width:210mm;min-height:297mm;background:#fff;display:flex;flex-direction:column;padding:4mm 6mm;page-break-after:always;box-sizing:border-box;}
+  .print-form-copy{flex:1;display:flex;flex-direction:column;padding-bottom:2mm;overflow:hidden;}
+  .print-form-copy+.print-form-copy{border-top:1.5px dashed #888;padding-top:2mm;padding-bottom:0;}
+  .print-copy-tag{display:inline-block;font-size:7px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#666;border:.8px solid #aaa;background:#f5f5f5;padding:1px 8px;border-radius:2px;margin-bottom:2px;font-family:Arial,sans-serif;}
+  .print-paper{font-family:'Times New Roman',Times,serif;font-size:7.8px;color:#000;flex:1;display:flex;flex-direction:column;gap:3px;}
+  .print-top-header{display:flex;justify-content:space-between;gap:4px;margin-bottom:2px;}
+  .print-req-box{border:.8px solid #666;padding:3px 5px;font-size:7px;display:flex;flex-direction:column;gap:2px;min-width:110px;}
+  .print-req-box label{display:flex;align-items:center;gap:3px;}
+  .print-chk{display:inline-block;width:7px;height:7px;border:.7px solid #555;margin-right:2px;flex-shrink:0;line-height:1;font-size:6px;text-align:center;}
+  .print-checked::after{content:'✓';}
+  .print-school-center{text-align:center;flex:1;}
+  .print-sc-name{font-size:9.5px;font-weight:bold;font-style:italic;line-height:1.2;margin-bottom:1px;}
+  .print-sc-sub{font-size:7px;margin-bottom:1px;}
+  .print-sc-dept{font-size:8px;font-weight:bold;text-transform:uppercase;margin-bottom:2px;}
+  .print-sc-title{font-size:9px;font-weight:bold;text-decoration:underline;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+  .print-sc-sem{font-size:7.5px;border-bottom:.8px solid #000;min-width:120px;padding-bottom:1px;margin-bottom:3px;text-align:center;}
+  .print-sc-ay{font-size:7.5px;}
+  .print-sc-val{display:inline-block;min-width:60px;border-bottom:.8px solid #000;}
+  .print-shiftee-box{border:.8px solid #666;padding:3px 5px;font-size:7.5px;display:flex;flex-direction:column;gap:2.5px;min-width:85px;}
+  .print-sf-from{display:flex;align-items:center;gap:2px;flex-wrap:wrap;font-size:7px;}
+  .print-sf-val{display:inline-block;min-width:32px;max-width:55px;width:auto;border-bottom:.7px solid #000;word-break:break-all;}
+  .print-sf-chk{display:flex;align-items:center;justify-content:space-between;}
+  .print-bracket{display:inline-flex;align-items:center;justify-content:center;width:10px;height:9px;border:.8px solid #555;font-size:7px;margin-left:3px;}
+  .print-sf-idno{display:flex;align-items:center;gap:2px;margin-top:1px;}
+  .print-idno-val{display:inline-block;flex:1;border-bottom:.7px solid #000;min-width:40px;}
+  .print-acad-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:7.8px;gap:6px;}
+  .print-acad-left{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .print-check-label{display:flex;align-items:center;gap:2px;}
+  .print-acad-right{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0;}
+  .print-ar{display:flex;align-items:center;gap:3px;white-space:nowrap;flex-wrap:wrap;}
+  .print-ar-val{display:inline-block;min-width:80px;max-width:180px;width:auto;flex:1;border-bottom:.7px solid #000;word-break:break-word;white-space:normal;line-height:1.3;}
+  .print-igrid{border:.8px solid #555;}
+  .print-ig-row{display:flex;border-bottom:.8px solid #555;align-items:stretch;}
+  .print-ig-row:last-child{border-bottom:none;}
+  .print-ig-cell{display:flex;align-items:center;padding:1.5px 4px;border-right:.8px solid #555;gap:3px;font-size:7.8px;flex:1;}
+  .print-ig-cell:last-child{border-right:none;}
+  .print-ig-cell b{white-space:nowrap;font-size:7.5px;flex-shrink:0;}
+  .print-cell-val{flex:1;border-bottom:.7px solid #000;min-height:9px;display:inline-block;}
+  .print-name-header{display:flex;border-bottom:.8px solid #bbb;align-items:center;}
+  .print-name-lbl{padding:1.5px 4px;font-weight:bold;font-size:7.8px;flex:1;border-right:.8px solid #555;}
+  .print-name-mobile{display:flex;align-items:center;gap:3px;padding:1.5px 4px;font-size:7.8px;width:148px;}
+  .print-mobile-val{flex:1;border-bottom:.7px solid #000;min-width:80px;display:inline-block;}
+  .print-name-subs{display:flex;min-height:17px;}
+  .print-name-sub{flex:1;padding:1.5px 4px 1px;border-right:.8px solid #555;display:flex;flex-direction:column;}
+  .print-name-sub:last-child{border-right:none;}
+  .print-name-val{width:100%;border-bottom:.8px solid #000;margin-bottom:1px;min-height:9px;display:inline-block;}
+  .print-name-span{font-size:6px;color:#555;text-align:center;}
+  .print-birth-row{display:flex;border-bottom:.8px solid #555;align-items:stretch;}
+  .print-bc{display:flex;align-items:center;padding:1.5px 3px;border-right:.8px solid #555;gap:2px;font-size:7.8px;}
+  .print-bc:last-child{border-right:none;}
+  .print-bc b{white-space:nowrap;font-size:7.5px;flex-shrink:0;}
+  .print-bc-val{flex:1;border-bottom:.7px solid #000;min-width:30px;display:inline-block;}
+  .print-ctable{width:100%;border-collapse:collapse;font-size:7.5px;}
+  .print-ctable th{border:.8px solid #555;padding:2px;text-align:center;font-weight:bold;font-size:7.5px;vertical-align:middle;}
+  .print-ctable td{border:.8px solid #555;padding:0 2px;vertical-align:middle;height:13px;text-align:center;}
+  .print-ctable tfoot td{font-size:7.5px;font-weight:bold;text-align:right;padding-right:4px;border-top:.8px solid #555;}
+  .print-total-line{display:inline-block;min-width:50px;border-bottom:.8px solid #000;font-weight:normal;padding-left:3px;}
+  .print-form-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px;font-size:7.8px;}
+  .print-approved{display:flex;align-items:flex-end;gap:3px;}
+  .print-approved-val{display:inline-block;width:130px;border-bottom:.7px solid #000;}
+  .print-sig-block{text-align:center;}
+  .print-sig-line{border-top:.8px solid #000;width:180px;margin:0 auto 2px;}
+  .print-sig-lbl{font-size:7px;}
+  .print-a4-back{width:210mm;min-height:297mm;background:#fff;display:flex;flex-direction:column;padding:4mm 6mm;font-family:'Times New Roman',Times,serif;color:#000;box-sizing:border-box;}
+  .print-back-copy{flex:1;display:flex;flex-direction:column;padding-bottom:2mm;overflow:hidden;}
+  .print-back-copy+.print-back-copy{border-top:1.5px dashed #888;padding-top:2mm;padding-bottom:0;}
+  .print-back-or-block{display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-bottom:4mm;font-size:8px;}
+  .print-or-row{display:flex;align-items:flex-end;gap:4px;white-space:nowrap;}
+  .print-or-line{display:inline-block;width:110px;border-bottom:.8px solid #000;}
+  .print-or-line-sm{width:80px;}
+  .print-back-sec-title{font-size:9px;font-weight:bold;margin-bottom:2px;margin-top:3px;}
+  .print-back-sub-title{font-size:8.5px;font-weight:bold;margin-bottom:3px;margin-top:5px;}
+  .print-back-body{font-size:7.8px;line-height:1.55;margin-bottom:4px;text-align:justify;}
+  .print-back-ol{margin-left:16px;margin-bottom:3px;}
+  .print-back-ol li{font-size:7.8px;line-height:1.55;text-align:justify;margin-bottom:1.5px;}
+  .print-back-ol-inner{margin-left:14px;list-style-type:lower-alpha;}
+  .print-payment-grid{display:grid;grid-template-columns:70px 110px 110px 110px 70px;gap:0;margin:4px 0 6px 16px;font-size:7.8px;align-items:end;}
+  .print-pg-label{white-space:nowrap;padding-bottom:2px;}
+  .print-pg-line{border-bottom:.8px solid #000;height:14px;}
+  .print-pg-mid{text-align:center;padding-bottom:2px;}
+  .print-pg-exam{text-align:right;padding-bottom:2px;}
+  .print-back-sig-block{margin-top:auto;padding-top:5mm;text-align:center;align-self:flex-end;}
+  .print-back-sig-line{border-top:.8px solid #000;width:190px;margin:0 auto 2px;}
+  .print-back-sig-lbl{font-size:7.5px;}
+  @page{size:A4 portrait;margin:0;}
+}
+
+@media(max-width:640px){
+  .fg-2,.fg-3{grid-template-columns:1fr;}
+  .fg-4{grid-template-columns:1fr 1fr;}
+  .field-span-2,.field-span-3,.field-span-4{grid-column:span 1;}
+  .hero-school{font-size:22px;}
+  .checklist{grid-template-columns:1fr;}
+  .shiftee-row{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+
+<div class="portal-wrap screen-only">
+  <div class="top-bar">
+    <button class="btn-back" onclick="if(window.self!==window.top){window.parent.history.back();}else{window.history.back();}">← Back</button>
+    <button class="btn-print" onclick="syncPrintValues();window.print();">Print Form</button>
+  </div>
+
+  <div class="hero">
+    <div class="hero-eyebrow">Academic Year <span id="heroAY">2024–2025</span></div>
+    <div class="hero-school" id="heroSchool">St. Cecilia's College - Cebu, Inc.</div>
+    <div class="hero-dept">De La Salle Supervised School · Higher Education Department</div>
+    <div class="hero-subtitle">Enrollment Registration Form</div>
+  </div>
+
+  <div class="info-alert">
+    <div class="info-alert-dot"></div>
+    <p>Fill in all fields below. Click <strong>Print Form</strong> to generate the official two-copy registration form for printing.</p>
+  </div>
+
+  <!-- Card 1: Semester -->
+  <div class="card">
+    <div class="card-body">
+      <div class="section-label">
+        <div class="section-label-icon">📅</div>
+        <h3>Semester &amp; Academic Info</h3>
+      </div>
+      <div class="field-grid fg-3">
+        <div class="field">
+          <label>Semester / Term</label>
+          <select id="f_semester"><option value="">Select semester</option><option>1st Semester</option><option>2nd Semester</option><option>Summer</option></select>
+        </div>
+        <div class="field">
+          <label>Academic Year</label>
+          <input type="text" id="f_ay" placeholder="e.g. 2024–2025">
+        </div>
+        <div class="field">
+          <label>Year Level</label>
+          <select id="f_yearlevel"><option value="">Select year</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select>
+        </div>
+        <div class="field field-span-2">
+          <label>Course / Program</label>
+          <select id="f_course"><option value="">— Loading courses… —</option></select>
+        </div>
+        <div class="field">
+          <label>Academic Status</label>
+          <div class="acad-toggle">
+            <button class="acad-btn active" onclick="setAcad(this,'Regular')">Regular</button>
+            <button class="acad-btn" onclick="setAcad(this,'Irregular')">Irregular</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: Student Type -->
+  <div class="card">
+    <div class="card-body">
+      <div class="section-label">
+        <div class="section-label-icon">🎓</div>
+        <h3>Student Type</h3>
+      </div>
+      <div class="type-row">
+        <div class="type-pill"><input type="radio" name="stype" id="t_transferee" value="Transferee"><label for="t_transferee">Transferee</label></div>
+        <div class="type-pill"><input type="radio" name="stype" id="t_returnee" value="Returnee" checked><label for="t_returnee">Returnee</label></div>
+        <div class="type-pill"><input type="radio" name="stype" id="t_new" value="New Student"><label for="t_new">New Student</label></div>
+        <div class="type-pill"><input type="radio" name="stype" id="t_old" value="Old Student"><label for="t_old">Old Student</label></div>
+      </div>
+      <div class="shiftee-row">
+        <span class="sep">Shiftee from:</span>
+        <div class="field"><select id="f_shiftfrom"><option value="">— Previous course —</option></select></div>
+        <span class="sep">to:</span>
+        <div class="field"><select id="f_shiftto"><option value="">— New course —</option></select></div>
+      </div>
+      <div class="id-row">
+        <div class="field"><label>I.D. Number</label><input type="text" id="f_idno" placeholder="Student ID"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: Personal Info -->
+  <div class="card">
+    <div class="card-body">
+      <div class="section-label">
+        <div class="section-label-icon">👤</div>
+        <h3>Personal Information</h3>
+      </div>
+      <div class="field-grid fg-3">
+        <div class="field"><label>Surname</label><input type="text" id="f_surname" placeholder="Last name"></div>
+        <div class="field"><label>First Name</label><input type="text" id="f_firstname" placeholder="First name"></div>
+        <div class="field"><label>Middle Name</label><input type="text" id="f_middlename" placeholder="Middle name"></div>
+        <div class="field"><label>Mobile Number</label><input type="text" id="f_mobile" placeholder="09xx xxx xxxx"></div>
+        <div class="field"><label>Birth Year</label><input type="text" id="f_byear" placeholder="YYYY"></div>
+        <div class="field"><label>Birth Month</label><input type="text" id="f_bmonth" placeholder="e.g. January"></div>
+        <div class="field"><label>Birth Day</label><input type="text" id="f_bday" placeholder="DD"></div>
+        <div class="field"><label>Sex</label><select id="f_sex"><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+        <div class="field"><label>Religion</label><input type="text" id="f_religion" placeholder="Religion"></div>
+        <div class="field"><label>Nationality</label><input type="text" id="f_nationality" placeholder="e.g. Filipino"></div>
+        <div class="field"><label>Civil Status</label><select id="f_status"><option value="">Select</option><option>Single</option><option>Married</option><option>Widowed</option></select></div>
+        <div class="field field-span-2"><label>Place of Birth</label><input type="text" id="f_pob" placeholder="City/Municipality, Province"></div>
+        <div class="field field-span-3"><label>Home Address</label><input type="text" id="f_address" placeholder="Complete home address"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4: School & Family -->
+  <div class="card">
+    <div class="card-body">
+      <div class="section-label">
+        <div class="section-label-icon">🏫</div>
+        <h3>School Background &amp; Family</h3>
+      </div>
+      <div class="field-grid fg-2">
+        <div class="field"><label>Previous School Attended</label><input type="text" id="f_prevschool" placeholder="Name of school"></div>
+        <div class="field"><label>Previous School Address</label><input type="text" id="f_prevaddr" placeholder="City / Province"></div>
+        <div class="field"><label>Father's Name</label><input type="text" id="f_father" placeholder="Full name"></div>
+        <div class="field"><label>Father's Occupation</label><input type="text" id="f_fatheroccup" placeholder="Occupation"></div>
+        <div class="field"><label>Mother's Name / Guardian</label><input type="text" id="f_mother" placeholder="Full name"></div>
+        <div class="field"><label>Mother's / Guardian Occupation</label><input type="text" id="f_motheroccup" placeholder="Occupation"></div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="sub-heading" style="margin-bottom:12px;">Guardian Information</div>
+      <div class="field-grid fg-3">
+        <div class="field"><label>Guardian's Name</label><input type="text" id="f_guardian" placeholder="Full name"></div>
+        <div class="field"><label>Relationship to Student</label><input type="text" id="f_guardian_rel" placeholder="e.g. Uncle, Aunt"></div>
+        <div class="field"><label>Guardian's Contact No.</label><input type="text" id="f_guardian_contact" placeholder="09xx xxx xxxx"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 5: Subjects -->
+  <div class="card">
+    <div class="card-body">
+      <div class="section-label">
+        <div class="section-label-icon">📚</div>
+        <h3>Subject Enrollment</h3>
+      </div>
+      <div class="subj-wrap">
+        <table class="subj-table">
+          <thead>
+            <tr>
+              <th rowspan="2" style="width:68px;">Course Code</th>
+              <th rowspan="2">Course Description</th>
+              <th colspan="2">Units</th>
+              <th rowspan="2" style="width:52px;">Days</th>
+              <th rowspan="2" style="width:72px;">Time</th>
+              <th rowspan="2" style="width:52px;">Room</th>
+              <th rowspan="2" style="width:80px;">Instructor</th>
+            </tr>
+            <tr class="th2"><th style="width:38px;">Lab</th><th style="width:38px;">Lec</th></tr>
+          </thead>
+          <tbody id="subj-tbody"></tbody>
+          <tfoot><tr><td colspan="7" style="text-align:right;padding-right:12px;color:var(--muted);">Total Units: <span class="total-val" id="total-screen">—</span></td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 6: Requirements -->
+  <div class="card">
+    <div class="card-body">
+      <div class="section-label">
+        <div class="section-label-icon">📋</div>
+        <h3>Submitted Requirements</h3>
+      </div>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox" id="req1"><span class="check-box"></span><span>Form 138-A</span></label>
+        <label class="check-item"><input type="checkbox" id="req2"><span class="check-box"></span><span>Birth Certificate (NSO)</span></label>
+        <label class="check-item"><input type="checkbox" id="req3"><span class="check-box"></span><span>Honorable Dismissal</span></label>
+        <label class="check-item"><input type="checkbox" id="req4"><span class="check-box"></span><span>Cert. of Transfer Credentials</span></label>
+        <label class="check-item"><input type="checkbox" id="req5"><span class="check-box"></span><span>1x1 Colored Picture (4 pcs.)</span></label>
+        <label class="check-item"><input type="checkbox" id="req6"><span class="check-box"></span><span>Medical Certificate</span></label>
+        <label class="check-item"><input type="checkbox" id="req7"><span class="check-box"></span><span>Certificate of Good Moral</span></label>
+        <label class="check-item"><input type="checkbox" id="req8"><span class="check-box"></span><span>Drug Test</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 7: Approval -->
+  <div class="card">
+    <div class="card-body">
+      <div class="section-label">
+        <div class="section-label-icon">✍️</div>
+        <h3>Approval &amp; Signature</h3>
+      </div>
+      <div class="field-grid fg-2">
+        <div class="field"><label>Approved By</label><input type="text" id="f_approvedby" placeholder="Registrar name"></div>
+      </div>
+      <div class="sig-row">
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-label">Applicant's Signature above Printed Name</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-bar">
+    <button class="btn-submit-ghost screen-only" onclick="syncPrintValues();window.print();">Print Only</button>
+    <button class="btn-submit" id="btn-enroll-submit" onclick="submitEnrollment();">Submit Enrollment</button>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="enrollModal">
+  <div class="modal-card">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">Enrollment Submitted</div>
+    <div class="modal-msg">Your form has been sent to the Registrar for review. You'll be notified once it's approved.</div>
+    <div class="modal-ref" id="modal-ref-no"></div>
+    <div class="modal-btns">
+      <button class="modal-btn-p" onclick="syncPrintValues();window.print();">Print Form</button>
+      <button class="modal-btn-o" onclick="document.getElementById('enrollModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT-ONLY: Classic Form (identical logic, preserved) -->
+<div class="print-only">
+  <div class="print-a4">
+    <div class="print-form-copy">
+      <span class="print-copy-tag">Student's Copy</span>
+      <div class="print-paper">
+        <div class="print-top-header">
+          <div class="print-req-box">
+            <label><span class="print-chk" id="pc_req1"></span> Form 138-A</label>
+            <label><span class="print-chk" id="pc_req2"></span> Birth Certificate (NSO)</label>
+            <label><span class="print-chk" id="pc_req3"></span> Honorable Dismissal</label>
+            <label><span class="print-chk" id="pc_req4"></span> Cert. of Transfer Credentials</label>
+            <label><span class="print-chk" id="pc_req5"></span> 1x1 Colored Picture (4 pcs.)</label>
+            <label><span class="print-chk" id="pc_req6"></span> Medical Certificate</label>
+            <label><span class="print-chk" id="pc_req7"></span> Certificate of Good Moral</label>
+            <label><span class="print-chk" id="pc_req8"></span> Drug Test</label>
+          </div>
+          <div class="print-school-center">
+            <div class="print-sc-name" id="pc_school1">St. Cecilia's College - Cebu, Inc.</div>
+            <div class="print-sc-sub">De La Salle Supervised School</div>
+            <div class="print-sc-dept">Higher Education Department</div>
+            <div class="print-sc-title">Registration Form</div>
+            <div class="print-sc-sem"><span class="print-sc-val" id="pc_sem1"></span> Semester / Term</div>
+            <div class="print-sc-ay">AY &nbsp;<span class="print-sc-val" id="pc_ay1"></span></div>
+          </div>
+          <div class="print-shiftee-box">
+            <div class="print-sf-from">Shiftee from:<span class="print-sf-val" id="pc_sfrom1"></span>&nbsp;to:<span class="print-sf-val" id="pc_sto1"></span></div>
+            <div class="print-sf-chk">Transferee <span class="print-bracket" id="pc_transferee1"></span></div>
+            <div class="print-sf-chk">Returnee <span class="print-bracket" id="pc_returnee1"></span></div>
+            <div class="print-sf-chk">New Student <span class="print-bracket" id="pc_new1"></span></div>
+            <div class="print-sf-chk">Old Student <span class="print-bracket" id="pc_old1"></span></div>
+            <div class="print-sf-idno">I.D. No.<span class="print-idno-val" id="pc_idno1"></span></div>
+          </div>
+        </div>
+        <div class="print-acad-row">
+          <div class="print-acad-left"><b>Academic Status:</b>
+            <span class="print-check-label"><span class="print-bracket" id="pc_regular1"></span> Regular</span>
+            <span class="print-check-label"><span class="print-bracket" id="pc_irregular1"></span> Irregular</span>
+          </div>
+          <div class="print-acad-right">
+            <div class="print-ar">Year Level: <span class="print-ar-val" id="pc_yearlevel1"></span></div>
+            <div class="print-ar">Course/Program: <span class="print-ar-val" id="pc_course1"></span></div>
+          </div>
+        </div>
+        <div class="print-igrid">
+          <div class="print-ig-row" style="flex-direction:column;padding:0;">
+            <div class="print-name-header">
+              <div class="print-name-lbl">Name:</div>
+              <div class="print-name-mobile"><b>Mobile No:</b><span class="print-mobile-val" id="pc_mobile1"></span></div>
+            </div>
+            <div class="print-name-subs">
+              <div class="print-name-sub" style="flex:1.3;"><span class="print-name-val" id="pc_surname1"></span><span class="print-name-span">Surname</span></div>
+              <div class="print-name-sub" style="flex:1.3;"><span class="print-name-val" id="pc_firstname1"></span><span class="print-name-span">First Name</span></div>
+              <div class="print-name-sub" style="flex:1;"><span class="print-name-val" id="pc_middlename1"></span><span class="print-name-span">Middle Name</span></div>
+            </div>
+          </div>
+          <div class="print-birth-row">
+            <div class="print-bc" style="flex:.55;"><b>Year:</b><span class="print-bc-val" id="pc_byear1"></span></div>
+            <div class="print-bc" style="flex:.75;"><b>Month:</b><span class="print-bc-val" id="pc_bmonth1"></span></div>
+            <div class="print-bc" style="flex:.45;"><b>Day:</b><span class="print-bc-val" id="pc_bday1"></span></div>
+            <div class="print-bc" style="flex:.65;"><b>Sex:</b><span class="print-bc-val" id="pc_sex1"></span></div>
+            <div class="print-bc" style="flex:1.05;"><b>Religion:</b><span class="print-bc-val" id="pc_religion1"></span></div>
+            <div class="print-bc" style="flex:.75;border-right:none;"><b>Status:</b><span class="print-bc-val" id="pc_status1"></span></div>
+          </div>
+          <div class="print-ig-row"><div class="print-ig-cell"><b>Nationality:</b><span class="print-cell-val" id="pc_nationality1"></span></div></div>
+          <div class="print-ig-row"><div class="print-ig-cell"><b>Place of Birth:</b><span class="print-cell-val" id="pc_pob1"></span></div></div>
+          <div class="print-ig-row"><div class="print-ig-cell"><b>Home Address:</b><span class="print-cell-val" id="pc_address1"></span></div></div>
+          <div class="print-ig-row">
+            <div class="print-ig-cell" style="flex:1.2;"><b>Previous School Attended:</b><span class="print-cell-val" id="pc_prevschool1"></span></div>
+            <div class="print-ig-cell" style="flex:1;"><b>Previous School Address:</b><span class="print-cell-val" id="pc_prevaddr1"></span></div>
+          </div>
+          <div class="print-ig-row">
+            <div class="print-ig-cell" style="flex:1.2;"><b>Father's Name:</b><span class="print-cell-val" id="pc_father1"></span></div>
+            <div class="print-ig-cell" style="flex:1;"><b>Occupation:</b><span class="print-cell-val" id="pc_fatheroccup1"></span></div>
+          </div>
+          <div class="print-ig-row" style="border-bottom:none;">
+            <div class="print-ig-cell" style="flex:1.2;"><b>Mother's Name/Guardian:</b><span class="print-cell-val" id="pc_mother1"></span></div>
+            <div class="print-ig-cell" style="flex:1;"><b>Occupation:</b><span class="print-cell-val" id="pc_motheroccup1"></span></div>
+          </div>
+          <div class="print-ig-row">
+            <div class="print-ig-cell" style="flex:1.2;"><b>Guardian's Name:</b><span class="print-cell-val" id="pc_guardian1"></span></div>
+            <div class="print-ig-cell" style="flex:.8;"><b>Relationship:</b><span class="print-cell-val" id="pc_guardian_rel1"></span></div>
+            <div class="print-ig-cell" style="flex:.8;border-right:none;"><b>Contact No.:</b><span class="print-cell-val" id="pc_guardian_contact1"></span></div>
+          </div>
+        </div>
+        <table class="print-ctable">
+          <thead>
+            <tr><th rowspan="2" style="width:50px;">COURSE<br>CODE NO.</th><th rowspan="2">COURSE DESCRIPTION</th><th colspan="2">UNITS</th><th rowspan="2" style="width:42px;">Days</th><th rowspan="2" style="width:60px;">Time</th><th rowspan="2" style="width:42px;">Room</th><th rowspan="2" style="width:64px;">Instructor</th></tr>
+            <tr><th style="width:27px;">Lab</th><th style="width:27px;">Lec</th></tr>
+          </thead>
+          <tbody id="pc_tbody1"></tbody>
+          <tfoot><tr><td colspan="7" style="border-right:.8px solid #555;"><b>Total Number of Units</b> <span class="print-total-line" id="pc_total1"></span></td><td></td></tr></tfoot>
+        </table>
+        <div class="print-approved"><b>Approved by:</b><span class="print-approved-val" id="pc_approved1"></span></div>
+        <div class="print-sig-block"><div class="print-sig-line"></div><div class="print-sig-lbl">Applicant's Signature above Printed Name</div></div>
+      </div>
+    </div>
+    <div class="print-form-copy">
+      <span class="print-copy-tag">Registrar's Copy</span>
+      <div class="print-paper">
+        <div class="print-top-header">
+          <div class="print-req-box">
+            <label><span class="print-chk" id="rc_req1"></span> Form 138-A</label>
+            <label><span class="print-chk" id="rc_req2"></span> Birth Certificate (NSO)</label>
+            <label><span class="print-chk" id="rc_req3"></span> Honorable Dismissal</label>
+            <label><span class="print-chk" id="rc_req4"></span> Cert. of Transfer Credentials</label>
+            <label><span class="print-chk" id="rc_req5"></span> 1x1 Colored Picture (4 pcs.)</label>
+            <label><span class="print-chk" id="rc_req6"></span> Medical Certificate</label>
+            <label><span class="print-chk" id="rc_req7"></span> Certificate of Good Moral</label>
+            <label><span class="print-chk" id="rc_req8"></span> Drug Test</label>
+          </div>
+          <div class="print-school-center">
+            <div class="print-sc-name" id="rc_school1">St. Cecilia's College - Cebu, Inc.</div>
+            <div class="print-sc-sub">De La Salle Supervised School</div>
+            <div class="print-sc-dept">Higher Education Department</div>
+            <div class="print-sc-title">Registration Form</div>
+            <div class="print-sc-sem"><span class="print-sc-val" id="rc_sem1"></span> Semester / Term</div>
+            <div class="print-sc-ay">AY &nbsp;<span class="print-sc-val" id="rc_ay1"></span></div>
+          </div>
+          <div class="print-shiftee-box">
+            <div class="print-sf-from">Shiftee from:<span class="print-sf-val" id="rc_sfrom1"></span>&nbsp;to:<span class="print-sf-val" id="rc_sto1"></span></div>
+            <div class="print-sf-chk">Transferee <span class="print-bracket" id="rc_transferee1"></span></div>
+            <div class="print-sf-chk">Returnee <span class="print-bracket" id="rc_returnee1"></span></div>
+            <div class="print-sf-chk">New Student <span class="print-bracket" id="rc_new1"></span></div>
+            <div class="print-sf-chk">Old Student <span class="print-bracket" id="rc_old1"></span></div>
+            <div class="print-sf-idno">I.D. No.<span class="print-idno-val" id="rc_idno1"></span></div>
+          </div>
+        </div>
+        <div class="print-acad-row">
+          <div class="print-acad-left"><b>Academic Status:</b>
+            <span class="print-check-label"><span class="print-bracket" id="rc_regular1"></span> Regular</span>
+            <span class="print-check-label"><span class="print-bracket" id="rc_irregular1"></span> Irregular</span>
+          </div>
+          <div class="print-acad-right">
+            <div class="print-ar">Year Level: <span class="print-ar-val" id="rc_yearlevel1"></span></div>
+            <div class="print-ar">Course/Program: <span class="print-ar-val" id="rc_course1"></span></div>
+          </div>
+        </div>
+        <div class="print-igrid">
+          <div class="print-ig-row" style="flex-direction:column;padding:0;">
+            <div class="print-name-header">
+              <div class="print-name-lbl">Name:</div>
+              <div class="print-name-mobile"><b>Mobile No:</b><span class="print-mobile-val" id="rc_mobile1"></span></div>
+            </div>
+            <div class="print-name-subs">
+              <div class="print-name-sub" style="flex:1.3;"><span class="print-name-val" id="rc_surname1"></span><span class="print-name-span">Surname</span></div>
+              <div class="print-name-sub" style="flex:1.3;"><span class="print-name-val" id="rc_firstname1"></span><span class="print-name-span">First Name</span></div>
+              <div class="print-name-sub" style="flex:1;"><span class="print-name-val" id="rc_middlename1"></span><span class="print-name-span">Middle Name</span></div>
+            </div>
+          </div>
+          <div class="print-birth-row">
+            <div class="print-bc" style="flex:.55;"><b>Year:</b><span class="print-bc-val" id="rc_byear1"></span></div>
+            <div class="print-bc" style="flex:.75;"><b>Month:</b><span class="print-bc-val" id="rc_bmonth1"></span></div>
+            <div class="print-bc" style="flex:.45;"><b>Day:</b><span class="print-bc-val" id="rc_bday1"></span></div>
+            <div class="print-bc" style="flex:.65;"><b>Sex:</b><span class="print-bc-val" id="rc_sex1"></span></div>
+            <div class="print-bc" style="flex:1.05;"><b>Religion:</b><span class="print-bc-val" id="rc_religion1"></span></div>
+            <div class="print-bc" style="flex:.75;border-right:none;"><b>Status:</b><span class="print-bc-val" id="rc_status1"></span></div>
+          </div>
+          <div class="print-ig-row"><div class="print-ig-cell"><b>Nationality:</b><span class="print-cell-val" id="rc_nationality1"></span></div></div>
+          <div class="print-ig-row"><div class="print-ig-cell"><b>Place of Birth:</b><span class="print-cell-val" id="rc_pob1"></span></div></div>
+          <div class="print-ig-row"><div class="print-ig-cell"><b>Home Address:</b><span class="print-cell-val" id="rc_address1"></span></div></div>
+          <div class="print-ig-row">
+            <div class="print-ig-cell" style="flex:1.2;"><b>Previous School Attended:</b><span class="print-cell-val" id="rc_prevschool1"></span></div>
+            <div class="print-ig-cell" style="flex:1;"><b>Previous School Address:</b><span class="print-cell-val" id="rc_prevaddr1"></span></div>
+          </div>
+          <div class="print-ig-row">
+            <div class="print-ig-cell" style="flex:1.2;"><b>Father's Name:</b><span class="print-cell-val" id="rc_father1"></span></div>
+            <div class="print-ig-cell" style="flex:1;"><b>Occupation:</b><span class="print-cell-val" id="rc_fatheroccup1"></span></div>
+          </div>
+          <div class="print-ig-row" style="border-bottom:none;">
+            <div class="print-ig-cell" style="flex:1.2;"><b>Mother's Name/Guardian:</b><span class="print-cell-val" id="rc_mother1"></span></div>
+            <div class="print-ig-cell" style="flex:1;"><b>Occupation:</b><span class="print-cell-val" id="rc_motheroccup1"></span></div>
+          </div>
+          <div class="print-ig-row">
+            <div class="print-ig-cell" style="flex:1.2;"><b>Guardian's Name:</b><span class="print-cell-val" id="rc_guardian1"></span></div>
+            <div class="print-ig-cell" style="flex:.8;"><b>Relationship:</b><span class="print-cell-val" id="rc_guardian_rel1"></span></div>
+            <div class="print-ig-cell" style="flex:.8;border-right:none;"><b>Contact No.:</b><span class="print-cell-val" id="rc_guardian_contact1"></span></div>
+          </div>
+        </div>
+        <table class="print-ctable">
+          <thead>
+            <tr><th rowspan="2" style="width:50px;">COURSE<br>CODE NO.</th><th rowspan="2">COURSE DESCRIPTION</th><th colspan="2">UNITS</th><th rowspan="2" style="width:42px;">Days</th><th rowspan="2" style="width:60px;">Time</th><th rowspan="2" style="width:42px;">Room</th><th rowspan="2" style="width:64px;">Instructor</th></tr>
+            <tr><th style="width:27px;">Lab</th><th style="width:27px;">Lec</th></tr>
+          </thead>
+          <tbody id="rc_tbody1"></tbody>
+          <tfoot><tr><td colspan="7" style="border-right:.8px solid #555;"><b>Total Number of Units</b> <span class="print-total-line" id="rc_total1"></span></td><td></td></tr></tfoot>
+        </table>
+        <div class="print-form-foot">
+          <div class="print-approved"><b>Approved by:</b><span class="print-approved-val" id="rc_approved1"></span></div>
+          <div class="print-sig-block"><div class="print-sig-line"></div><div class="print-sig-lbl">Applicant's Signature above Printed Name</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="print-a4-back">
+    <div class="print-back-copy">
+      <span class="print-copy-tag">Student's Copy</span>
+      <div class="print-back-or-block">
+        <div class="print-or-row">O.R. # <span class="print-or-line"></span></div>
+        <div class="print-or-row">Amount Paid <span class="print-or-line"></span></div>
+        <div class="print-or-row">Date <span class="print-or-line print-or-line-sm"></span></div>
+        <div class="print-or-row">Cashier Signature <span class="print-or-line print-or-line-sm"></span></div>
+      </div>
+      <div class="print-back-sec-title">CONDITION OF PAYMENT</div>
+      <div class="print-back-sub-title">A. MODE OF PAYMENT</div>
+      <p class="print-back-body">The tuition and other school fees shall be payable in cash in <strong>4 monthly installments</strong> in accordance with the following schedule.</p>
+      <div class="print-payment-grid">
+        <div class="print-pg-label">1st payment</div><div class="print-pg-line"></div><div class="print-pg-mid">payable on or before</div><div class="print-pg-line"></div><div class="print-pg-exam">Prelim Exam</div>
+        <div class="print-pg-label">2nd payment</div><div class="print-pg-line"></div><div class="print-pg-mid">payable on or before</div><div class="print-pg-line"></div><div class="print-pg-exam">Midterm Exam</div>
+        <div class="print-pg-label">3rd payment</div><div class="print-pg-line"></div><div class="print-pg-mid">payable on or before</div><div class="print-pg-line"></div><div class="print-pg-exam">Prefinal Exam</div>
+        <div class="print-pg-label">4th payment</div><div class="print-pg-line"></div><div class="print-pg-mid">due on or before</div><div class="print-pg-line"></div><div class="print-pg-exam">Final Exam</div>
+      </div>
+      <p class="print-back-body">In case of failure to pay at least two (2) installments of the due and demandable tuition and other school fees as indicated in the above schedule of payment on installments, we (the parents) or I (in case of student) shall recognize, without reservation, the right/authority of the school to drop me (or our child) from the school (or suspend me or our child) from further attending classes and enter the school campus, without need of judicial intervention or permission. That I, (or our child) shall be re-admitted only as soon as the tuition and other school fees are paid PROVIDED, however, that I, (our child) will be solely responsible in keeping up with the lessons and assignments missed and shall not have any right to require that special lessons, quizzes and or examinations be given to make-up for the quizzes and/or examinations given during the school day (our child was not allowed to enter and attend classes).</p>
+      <div class="print-back-sub-title">B. Policy on withdrawals and refund</div>
+      <p class="print-back-body">The date of filling the notice or withdrawal shall be considered the date of withdrawal and shall the basis in determining the amount to be charged for the term. Computation for adjustment will be in the accounting Office.</p>
+      <ol class="print-back-ol">
+        <li>Enrollment deposited can be refunded subject to the following conditions.<ol class="print-back-ol-inner"><li>80% refund before the subjects are encoded and before the enrollment closes.</li><li>20% refund if the subjects are encoded before the enrollment closes.</li><li>No refund after the enrollment closes.</li></ol></li>
+        <li>10% charge on tuition and other school fees if a student withdraws within the first week of classes regardless of whether or not he/she actually attended classes.</li>
+        <li>20% charge on tuition and other school fees if a student withdraws within the second week of classes regardless of whether or not he/she actually attended classes.</li>
+        <li>50% charge on tuition and other school fees if a student withdraws within the third week of classes regardless of whether or not he/she actually attended classes.</li>
+        <li>75% charge on tuition and other school fees if a student withdraws within the fourth week of classes regardless of whether or not he/she actually attended classes.</li>
+        <li>100% charge on tuition and other school fees if a student withdraws within the fifth week of classes regardless of whether or not he/she actually attended classes.</li>
+      </ol>
+      <div class="print-back-sig-block"><div class="print-back-sig-line"></div><div class="print-back-sig-lbl">Applicant's Signature Above Printed Name</div></div>
+    </div>
+    <div class="print-back-copy">
+      <span class="print-copy-tag">Registrar's Copy</span>
+      <div class="print-back-or-block">
+        <div class="print-or-row">O.R. # <span class="print-or-line"></span></div>
+        <div class="print-or-row">Amount Paid <span class="print-or-line"></span></div>
+        <div class="print-or-row">Date <span class="print-or-line print-or-line-sm"></span></div>
+        <div class="print-or-row">Cashier Signature <span class="print-or-line print-or-line-sm"></span></div>
+      </div>
+      <div class="print-back-sec-title">CONDITION OF PAYMENT</div>
+      <div class="print-back-sub-title">A. MODE OF PAYMENT</div>
+      <p class="print-back-body">The tuition and other school fees shall be payable in cash in <strong>4 monthly installments</strong> in accordance with the following schedule.</p>
+      <div class="print-payment-grid">
+        <div class="print-pg-label">1st payment</div><div class="print-pg-line"></div><div class="print-pg-mid">payable on or before</div><div class="print-pg-line"></div><div class="print-pg-exam">Prelim Exam</div>
+        <div class="print-pg-label">2nd payment</div><div class="print-pg-line"></div><div class="print-pg-mid">payable on or before</div><div class="print-pg-line"></div><div class="print-pg-exam">Midterm Exam</div>
+        <div class="print-pg-label">3rd payment</div><div class="print-pg-line"></div><div class="print-pg-mid">payable on or before</div><div class="print-pg-line"></div><div class="print-pg-exam">Prefinal Exam</div>
+        <div class="print-pg-label">4th payment</div><div class="print-pg-line"></div><div class="print-pg-mid">due on or before</div><div class="print-pg-line"></div><div class="print-pg-exam">Final Exam</div>
+      </div>
+      <p class="print-back-body">In case of failure to pay at least two (2) installments of the due and demandable tuition and other school fees as indicated in the above schedule of payment on installments, we (the parents) or I (in case of student) shall recognize, without reservation, the right/authority of the school to drop me (or our child) from the school (or suspend me or our child) from further attending classes and enter the school campus, without need of judicial intervention or permission. That I, (or our child) shall be re-admitted only as soon as the tuition and other school fees are paid PROVIDED, however, that I, (our child) will be solely responsible in keeping up with the lessons and assignments missed and shall not have any right to require that special lessons, quizzes and or examinations be given to make-up for the quizzes and/or examinations given during the school day (our child was not allowed to enter and attend classes).</p>
+      <div class="print-back-sub-title">B. Policy on withdrawals and refund</div>
+      <p class="print-back-body">The date of filling the notice or withdrawal shall be considered the date of withdrawal and shall the basis in determining the amount to be charged for the term. Computation for adjustment will be in the accounting Office.</p>
+      <ol class="print-back-ol">
+        <li>Enrollment deposited can be refunded subject to the following conditions.<ol class="print-back-ol-inner"><li>80% refund before the subjects are encoded and before the enrollment closes.</li><li>20% refund if the subjects are encoded before the enrollment closes.</li><li>No refund after the enrollment closes.</li></ol></li>
+        <li>10% charge on tuition and other school fees if a student withdraws within the first week of classes regardless of whether or not he/she actually attended classes.</li>
+        <li>20% charge on tuition and other school fees if a student withdraws within the second week of classes regardless of whether or not he/she actually attended classes.</li>
+        <li>50% charge on tuition and other school fees if a student withdraws within the third week of classes regardless of whether or not he/she actually attended classes.</li>
+        <li>75% charge on tuition and other school fees if a student withdraws within the fourth week of classes regardless of whether or not he/she actually attended classes.</li>
+        <li>100% charge on tuition and other school fees if a student withdraws within the fifth week of classes regardless of whether or not he/she actually attended classes.</li>
+      </ol>
+      <div class="print-back-sig-block"><div class="print-back-sig-line"></div><div class="print-back-sig-lbl">Applicant's Signature Above Printed Name</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const tbody=document.getElementById('subj-tbody');
+  for(let i=0;i<8;i++){
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><input type="text" data-col="code" data-row="${i}"></td><td><input type="text" data-col="desc" data-row="${i}" style="width:100%;text-align:left;padding-left:8px;"></td><td><input type="number" data-col="lab" data-row="${i}" min="0" step="0.5" oninput="calcScreenTotal()"></td><td><input type="number" data-col="lec" data-row="${i}" min="0" step="0.5" oninput="calcScreenTotal()"></td><td><input type="text" data-col="days" data-row="${i}"></td><td><input type="text" data-col="time" data-row="${i}"></td><td><input type="text" data-col="room" data-row="${i}"></td><td><input type="text" data-col="instructor" data-row="${i}"></td>`;
+    tbody.appendChild(tr);
+  }
+})();
+
+function calcScreenTotal(){
+  let t=0;
+  document.querySelectorAll('#subj-tbody input[type=number]').forEach(i=>{t+=parseFloat(i.value)||0;});
+  document.getElementById('total-screen').textContent=t>0?t:'—';
+}
+
+let acadStatus='Regular';
+function setAcad(btn,val){
+  acadStatus=val;
+  document.querySelectorAll('.acad-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function gv(id){const el=document.getElementById(id);if(!el)return '';if(el.tagName==='SELECT'){return el.options[el.selectedIndex]?el.options[el.selectedIndex].value:'';}return el.value||el.textContent||'';}
+function gcode(id){const el=document.getElementById(id);if(!el)return '';if(el.tagName==='SELECT'){const opt=el.options[el.selectedIndex];return opt?(opt.dataset.code||opt.value):'';}return el.value||el.textContent||'';}
+function vd(col,row){const el=document.querySelector(`#subj-tbody input[data-col="${col}"][data-row="${row}"]`);return el?(el.value||''):''}
+
+function syncPrintValues(){
+  function set(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
+  ['pc_','rc_'].forEach(p=>{
+    set(p+'sem1',gv('f_semester'));set(p+'ay1',gv('f_ay'));set(p+'yearlevel1',gv('f_yearlevel'));
+    set(p+'course1',gcode('f_course'));set(p+'sfrom1',gcode('f_shiftfrom'));set(p+'sto1',gcode('f_shiftto'));
+    set(p+'idno1',gv('f_idno'));set(p+'surname1',gv('f_surname'));set(p+'firstname1',gv('f_firstname'));
+    set(p+'middlename1',gv('f_middlename'));set(p+'mobile1',gv('f_mobile'));set(p+'byear1',gv('f_byear'));
+    set(p+'bmonth1',gv('f_bmonth'));set(p+'bday1',gv('f_bday'));set(p+'sex1',gv('f_sex'));
+    set(p+'religion1',gv('f_religion'));set(p+'nationality1',gv('f_nationality'));set(p+'status1',gv('f_status'));
+    set(p+'pob1',gv('f_pob'));set(p+'address1',gv('f_address'));set(p+'prevschool1',gv('f_prevschool'));
+    set(p+'prevaddr1',gv('f_prevaddr'));set(p+'father1',gv('f_father'));set(p+'fatheroccup1',gv('f_fatheroccup'));
+    set(p+'mother1',gv('f_mother'));set(p+'motheroccup1',gv('f_motheroccup'));set(p+'guardian1',gv('f_guardian'));
+    set(p+'guardian_rel1',gv('f_guardian_rel'));set(p+'guardian_contact1',gv('f_guardian_contact'));set(p+'approved1',gv('f_approvedby'));
+    const isReg=acadStatus==='Regular';
+    const re=document.getElementById(p+'regular1');if(re)re.textContent=isReg?'✓':'';
+    const ir=document.getElementById(p+'irregular1');if(ir)ir.textContent=!isReg?'✓':'';
+    const sel=(document.querySelector('input[name=stype]:checked')||{}).value||'';
+    const tm={'Transferee':p+'transferee1','Returnee':p+'returnee1','New Student':p+'new1','Old Student':p+'old1'};
+    Object.entries(tm).forEach(([t,eid])=>{const el=document.getElementById(eid);if(el)el.textContent=(sel===t)?'✓':'';});
+  });
+  for(let i=1;i<=8;i++){
+    const checked=document.getElementById('req'+i)?.checked;
+    ['pc_req','rc_req'].forEach(p=>{const el=document.getElementById(p+i);if(el)el.className='print-chk'+(checked?' print-checked':'');});
+  }
+  ['pc_tbody1','rc_tbody1'].forEach(tid=>{
+    const tbody=document.getElementById(tid);tbody.innerHTML='';let total=0;
+    for(let i=0;i<8;i++){
+      const lab=vd('lab',i),lec=vd('lec',i);total+=(parseFloat(lab)||0)+(parseFloat(lec)||0);
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${vd('code',i)}</td><td style="text-align:left;padding-left:2px;">${vd('desc',i)}</td><td>${lab}</td><td>${lec}</td><td>${vd('days',i)}</td><td>${vd('time',i)}</td><td>${vd('room',i)}</td><td>${vd('instructor',i)}</td>`;
+      tbody.appendChild(tr);
+    }
+    const tel=document.getElementById(tid.replace('tbody','total'));if(tel)tel.textContent=total>0?total:'';
+  });
+}
+
+(async function(){
+  try{
+    const res=await fetch('../src/api/shared/get_branding_public.php');
+    const data=await res.json();
+    if(!data.success)return;
+    const name=data.school_name||'';
+    if(name){
+      document.querySelectorAll('.print-sc-name').forEach(el=>el.textContent=name);
+      const h=document.getElementById('heroSchool');if(h)h.textContent=name;
+      document.title='Enrollment Form — '+name;
+    }
+  }catch(e){}
+})();
+
+async function submitEnrollment(){
+  document.querySelectorAll('.err').forEach(el=>el.classList.remove('err'));
+  const get=id=>{const el=document.getElementById(id);if(!el)return '';return el.value?el.value.trim():(el.textContent||'').trim();};
+  const stype=(document.querySelector('input[name=stype]:checked')||{}).value||'';
+  const required=[['f_surname','Surname'],['f_firstname','First Name'],['f_course','Course / Program'],['f_yearlevel','Year Level'],['f_semester','Semester']];
+  let errors=[];
+  required.forEach(([id,label])=>{if(!get(id)){errors.push(label);const el=document.getElementById(id);if(el)el.classList.add('err');}});
+  if(errors.length){alert('Please fill in the following required fields:\n• '+errors.join('\n• '));return;}
+  const btn=document.getElementById('btn-enroll-submit');btn.disabled=true;btn.textContent='Submitting…';
+  const payload={surname:get('f_surname'),firstname:get('f_firstname'),middlename:get('f_middlename'),mobile:get('f_mobile'),byear:get('f_byear'),bmonth:get('f_bmonth'),bday:get('f_bday'),sex:get('f_sex'),religion:get('f_religion'),nationality:get('f_nationality'),civil_status:get('f_status'),pob:get('f_pob'),address:get('f_address'),semester:get('f_semester'),ay:get('f_ay'),year_level:get('f_yearlevel'),course:get('f_course'),acad_status:acadStatus,student_type:stype,shift_from:get('f_shiftfrom'),shift_to:get('f_shiftto'),student_id:get('f_idno'),prev_school:get('f_prevschool'),prev_addr:get('f_prevaddr'),father_name:get('f_father'),father_occup:get('f_fatheroccup'),mother_name:get('f_mother'),mother_occup:get('f_motheroccup'),guardian_name:get('f_guardian'),guardian_rel:get('f_guardian_rel'),guardian_contact:get('f_guardian_contact')};
+  const paths=['../src/api/public/submit_enrollment.php','../php/api/public/submit_enrollment.php','/php/api/public/submit_enrollment.php'];
+  let result=null;
+  for(const path of paths){try{const res=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const ct=res.headers.get('content-type')||'';if(!ct.includes('application/json')&&!ct.includes('text/plain'))continue;const text=await res.text();if(!text.trim().startsWith('{'))continue;result=JSON.parse(text);break;}catch(e){}}
+  btn.disabled=false;btn.textContent='Submit Enrollment';
+  if(!result){alert('Could not connect to the server. Please check your connection and try again.');return;}
+  if(result.success){syncPrintValues();const refEl=document.getElementById('modal-ref-no');if(refEl)refEl.textContent='Reference #: ENR-'+String(result.student_id||'').padStart(5,'0');document.getElementById('enrollModal').classList.add('open');}
+  else{alert('❌ '+(result.message||'Submission failed. Please try again.'));}
+}
+
+// ── Auto-fill from URL params (passed from student dashboard) ──────────
+(function autofillFromURL(){
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('autofill') !== '1') return;
+
+  function setField(id, val) {
+    if (!val) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'SELECT') {
+      // Try to match option by value or text
+      for (let i = 0; i < el.options.length; i++) {
+        if (el.options[i].value === val || el.options[i].text === val) {
+          el.selectedIndex = i;
+          break;
+        }
+      }
+    } else {
+      el.value = val;
+    }
+  }
+
+  // Personal info
+  setField('f_surname',    params.get('surname')    || '');
+  setField('f_firstname',  params.get('firstname')  || '');
+  setField('f_middlename', params.get('middlename') || '');
+  setField('f_idno',       params.get('student_id') || '');
+  setField('f_year_level', params.get('year_level') || '');
+
+  // Academic info — semester and AY
+  const semVal = params.get('semester') || '';
+  const ayVal  = params.get('ay')       || '';
+  setField('f_semester', semVal);
+  setField('f_ay',       ayVal);
+
+  // Year level select
+  const ylVal = params.get('year_level') || '';
+  if (ylVal) {
+    const yl = document.getElementById('f_yearlevel');
+    if (yl) {
+      for (let i = 0; i < yl.options.length; i++) {
+        if (yl.options[i].value === ylVal || yl.options[i].text.toLowerCase().includes(ylVal.toLowerCase())) {
+          yl.selectedIndex = i;
+          break;
+        }
+      }
+    }
+  }
+
+  // Course — must wait for loadCourses to populate the select
+  const courseVal = params.get('course') || '';
+  if (courseVal) {
+    // Poll until the course dropdown is populated, then select
+    let attempts = 0;
+    const courseInterval = setInterval(function() {
+      const sel = document.getElementById('f_course');
+      if (!sel || attempts++ > 30) { clearInterval(courseInterval); return; }
+      for (let i = 0; i < sel.options.length; i++) {
+        const opt = sel.options[i];
+        if (opt.value === courseVal || opt.dataset.code === courseVal ||
+            (opt.text && opt.text.includes(courseVal))) {
+          sel.selectedIndex = i;
+          clearInterval(courseInterval);
+          break;
+        }
+      }
+    }, 200);
+  }
+
+  // Show a subtle banner that the form was auto-filled
+  const infoAlert = document.querySelector('.info-alert p');
+  if (infoAlert) {
+    infoAlert.innerHTML = '✅ <strong>Your information has been pre-filled</strong> from your student account. Please review each field, complete any missing details, and submit when ready.';
+  }
+})();
+
+(async function loadCourses(){
+  const selIds=['f_course','f_shiftfrom','f_shiftto'];
+  const placeholders={f_course:'— Select Course / Program —',f_shiftfrom:'— Previous course —',f_shiftto:'— New course —'};
+  const FALLBACK_COURSES=[
+    {id:1,course_name:'Bachelor of Science in Computer Science',course_code:'BSCS',duration_years:4},
+    {id:2,course_name:'Bachelor of Science in Information Technology',course_code:'BSIT',duration_years:4},
+    {id:3,course_name:'Bachelor of Science in Mathematics',course_code:'BSMATH',duration_years:4},
+    {id:4,course_name:'Bachelor of Science Criminology',course_code:'BSC',duration_years:4},
+    {id:5,course_name:'Bachelor of Science in Hospitality and Tourism Management',course_code:'BSHTM',duration_years:4}
+  ];
+  function populate(id,courses){const sel=document.getElementById(id);if(!sel)return;sel.innerHTML=`<option value="">${placeholders[id]}</option>`;courses.forEach(c=>{const opt=document.createElement('option');opt.value=c.course_code;opt.textContent=`${c.course_code} — ${c.course_name}`;opt.dataset.code=c.course_code;opt.dataset.fullname=c.course_name;opt.dataset.years=c.duration_years;sel.appendChild(opt);});}
+  const API_PATHS=['../src/api/shared/get_courses_public.php','../php/api/get_courses_public.php','/php/api/get_courses_public.php'];
+  let loaded=false;
+  for(const path of API_PATHS){try{const res=await fetch(path);const ct=res.headers.get('content-type')||'';if(!ct.includes('application/json')&&!ct.includes('text/plain'))continue;const text=await res.text();if(!text.trim().startsWith('{')&&!text.trim().startsWith('['))continue;const data=JSON.parse(text);if(data.success&&Array.isArray(data.courses)&&data.courses.length>0){selIds.forEach(id=>populate(id,data.courses));loaded=true;break;}}catch(e){}}
+  if(!loaded){selIds.forEach(id=>populate(id,FALLBACK_COURSES));}
+})();
+</script>
+</body>
+</html>

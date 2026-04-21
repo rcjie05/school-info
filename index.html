@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="images/logo2.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="images/logo2.jpg">
+    <link rel="apple-touch-icon" href="images/logo2.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1E3352">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SCC Portal">
+    <title>Student Enrollment Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --red:     #8b0000;
+            --red-mid: #a31515;
+            --red-lt:  #c0392b;
+            --gold:    #c8a951;
+            --gold-lt: #e8c96a;
+            --cream:   #fdf8f0;
+            --white:   #ffffff;
+            --gray:    #64748b;
+            --border:  #e2e8f0;
+            --dark:    #1e293b;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+        }
+
+        /* ── TOPBAR ── */
+        /* ── TOPBAR ── */
+        .topbar { background: var(--red); color: white; font-size: .73rem; padding: .35rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .4rem; border-bottom: 2px solid var(--gold); }
+        .topbar a { color: var(--gold-lt); text-decoration: none; }
+        .topbar-right { display: flex; gap: 1.5rem; }
+        .topbar-left { opacity: .8; }
+
+        /* ── NAVBAR ── */
+        .navbar, nav.navbar { background: white; border-bottom: 3px solid var(--red); display: flex; align-items: center; justify-content: space-between; padding: .6rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-brand { display: flex; align-items: center; gap: .85rem; text-decoration: none; }
+        .nav-logo { width: 52px; height: 52px; border-radius: 50%; background: var(--red); border: 2.5px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 800; font-size: .78rem; color: var(--gold); text-align: center; line-height: 1.2; overflow: hidden; }
+        .nav-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .nav-name strong { display: block; font-family: 'Playfair Display', serif; font-size: .92rem; color: var(--red); font-weight: 700; }
+        .nav-name small, .nav-name span { font-size: .68rem; color: var(--gray); display: block; }
+        .nav-links { display: flex; gap: .15rem; align-items: center; }
+        .nav-links a { color: var(--dark); text-decoration: none; font-size: .8rem; font-weight: 700; padding: .45rem .8rem; border-radius: 4px; text-transform: uppercase; letter-spacing: .4px; transition: background .2s, color .2s; }
+        .nav-links a:hover { background: var(--red); color: white; }
+        .nav-links a.active { background: var(--red); color: white; }
+        .nav-enroll { background: var(--gold) !important; color: var(--dark) !important; }
+        .nav-enroll:hover { background: var(--gold-lt) !important; color: var(--dark) !important; }
+
+        /* ── HERO SLIDER ── */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            height: 520px;
+            background: var(--red);
+        }
+        .slides-wrap {
+            display: flex;
+            width: 500%;
+            height: 100%;
+            animation: autoSlide 20s infinite;
+        }
+        .slide {
+            width: 20%; height: 100%;
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .slide-bg {
+            position: absolute; inset: 0;
+        }
+        .s1 .slide-bg { background: linear-gradient(135deg, #3d0000 0%, #8b0000 50%, #5a0000 100%); }
+        .s2 .slide-bg { background: linear-gradient(135deg, #5a0000 0%, #3d0000 50%, #700000 100%); }
+        .s3 .slide-bg { background: linear-gradient(135deg, #700000 0%, #5a0000 50%, #3d0000 100%); }
+        .s4 .slide-bg { background: linear-gradient(135deg, #3d0000 0%, #700000 50%, #8b0000 100%); }
+        .s5 .slide-bg { background: linear-gradient(135deg, #8b0000 0%, #3d0000 50%, #5a0000 100%); }
+        .slide::after {
+            content: ''; position: absolute; inset: 0;
+            background: rgba(0,0,0,0.4);
+        }
+        .slide-inner {
+            position: relative; z-index: 2;
+            text-align: center; color: white;
+            max-width: 700px; padding: 2rem;
+        }
+        .slide-inner .tag {
+            display: inline-block;
+            background: var(--gold); color: var(--dark);
+            font-size: .72rem; font-weight: 900;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            padding: .3rem .9rem; border-radius: 3px;
+            margin-bottom: 1.25rem;
+        }
+        .slide-inner h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 800; line-height: 1.15;
+            text-shadow: 0 3px 12px rgba(0,0,0,0.5);
+            margin-bottom: .75rem;
+        }
+        .slide-inner h1 em { color: var(--gold-lt); font-style: italic; }
+        .gold-bar { width: 60px; height: 4px; background: var(--gold); margin: 1rem auto; border-radius: 2px; }
+        .slide-inner p { font-size: 1rem; opacity: .85; max-width: 500px; margin: 0 auto 1.75rem; line-height: 1.6; }
+        .slide-btn {
+            display: inline-block;
+            background: var(--gold); color: var(--dark);
+            font-weight: 900; font-size: .88rem;
+            padding: .75rem 2rem; border-radius: 4px;
+            text-decoration: none; letter-spacing: .5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 16px rgba(200,169,81,0.4);
+            transition: background .2s, transform .15s;
+        }
+        .slide-btn:hover { background: var(--gold-lt); transform: translateY(-2px); }
+        .slide-btn-ghost {
+            display: inline-block;
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.6);
+            color: white; font-weight: 700; font-size: .88rem;
+            padding: .73rem 1.8rem; border-radius: 4px;
+            text-decoration: none; letter-spacing: .5px;
+            text-transform: uppercase; margin-left: .75rem;
+            transition: border-color .2s, background .2s;
+        }
+        .slide-btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+        @keyframes autoSlide {
+            0%,18%  { transform: translateX(0%); }
+            20%,38% { transform: translateX(-20%); }
+            40%,58% { transform: translateX(-40%); }
+            60%,78% { transform: translateX(-60%); }
+            80%,98% { transform: translateX(-80%); }
+            100%    { transform: translateX(0%); }
+        }
+
+        /* Dots */
+        .slide-dots {
+            position: absolute; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+            display: flex; gap: .45rem; z-index: 10;
+        }
+        .sdot {
+            width: 9px; height: 9px; border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            border: 1.5px solid rgba(255,255,255,0.5);
+            cursor: pointer; transition: background .3s;
+        }
+        .sdot.on { background: var(--gold); border-color: var(--gold); }
+
+        /* ── PROGRAMS STRIP ── */
+        .programs-strip {
+            background: white;
+            border-bottom: 3px solid var(--red);
+            padding: 2.5rem;
+        }
+        .programs-inner {
+            max-width: 1100px; margin: 0 auto;
+        }
+        .strip-label {
+            text-align: center;
+            font-size: .7rem; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--red); margin-bottom: .5rem;
+        }
+        .strip-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem; color: var(--dark);
+            font-weight: 700; margin-bottom: .6rem;
+        }
+        .strip-divider {
+            width: 50px; height: 3px; background: var(--gold);
+            margin: 0 auto 2rem; border-radius: 2px;
+        }
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+        }
+        .prog-card {
+            text-align: center;
+            padding: 1.25rem .75rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            border-top: 3px solid var(--red);
+            background: var(--cream);
+            transition: box-shadow .2s, transform .15s;
+            cursor: default;
+        }
+        .prog-card:hover { box-shadow: 0 4px 20px rgba(139,0,0,0.1); transform: translateY(-3px); }
+        .prog-icon { font-size: 2rem; margin-bottom: .5rem; }
+        .prog-name { font-size: .8rem; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: .3px; margin-bottom: .25rem; }
+        .prog-desc { font-size: .72rem; color: var(--gray); line-height: 1.45; }
+
+        /* ── ENROLLMENT SECTION ── */
+        .enrollment-section {
+            background: var(--cream);
+            padding: 4rem 2.5rem;
+        }
+        .section-wrap { max-width: 1100px; margin: 0 auto; }
+        .section-head { margin-bottom: 2.5rem; }
+        .section-head .label {
+            display: inline-block;
+            background: var(--red); color: var(--gold);
+            font-size: .68rem; font-weight: 700;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            padding: .3rem .8rem; border-radius: 3px;
+            margin-bottom: .75rem;
+        }
+        .section-head h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem; color: var(--red); font-weight: 700;
+            margin-bottom: .5rem;
+        }
+        .section-head .divider {
+            width: 48px; height: 3px; background: var(--gold);
+            border-radius: 2px; margin-bottom: .75rem;
+        }
+        .section-head p { font-size: .9rem; color: var(--gray); line-height: 1.7; max-width: 600px; }
+
+        .enroll-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Steps sidebar */
+        .steps-col { display: flex; flex-direction: column; gap: .75rem; }
+        .step-item {
+            display: flex; align-items: flex-start; gap: .8rem;
+            padding: .9rem 1rem;
+            background: white;
+            border: 1.5px solid var(--border);
+            border-left: 4px solid var(--red);
+            border-radius: 6px;
+            cursor: default;
+            transition: box-shadow .2s;
+        }
+        .step-item:hover { box-shadow: 0 4px 14px rgba(139,0,0,0.1); }
+        .step-item.active { background: var(--red); border-color: var(--red); }
+        .step-num {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--red); color: var(--gold);
+            font-family: 'Playfair Display', serif;
+            font-weight: 700; font-size: .85rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-item.active .step-num { background: var(--gold); color: var(--red); }
+        .step-text strong { display: block; font-size: .82rem; color: var(--dark); font-weight: 700; margin-bottom: .15rem; }
+        .step-item.active .step-text strong { color: white; }
+        .step-text span { font-size: .72rem; color: var(--gray); line-height: 1.4; }
+        .step-item.active .step-text span { color: rgba(255,255,255,0.7); }
+
+        .steps-note {
+            background: #fff8e6;
+            border: 1px solid var(--gold);
+            border-radius: 6px;
+            padding: .85rem 1rem;
+            font-size: .78rem;
+            color: #7a5c00;
+            line-height: 1.6;
+        }
+        .steps-note strong { display: block; color: var(--red); margin-bottom: .25rem; font-size: .8rem; }
+
+        /* Form frame */
+        .form-frame {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(139,0,0,0.1);
+            border: 1.5px solid rgba(139,0,0,0.12);
+        }
+        .frame-bar {
+            background: var(--red);
+            padding: .75rem 1.25rem;
+            display: flex; align-items: center; gap: .6rem;
+            border-bottom: 3px solid var(--gold);
+        }
+        .fbar-dot { width: 11px; height: 11px; border-radius: 50%; }
+        .fbar-dot.r { background: #ff5f57; }
+        .fbar-dot.y { background: #febc2e; }
+        .fbar-dot.g { background: #28c840; }
+        .fbar-title {
+            flex: 1; text-align: center;
+            font-size: .78rem; color: rgba(255,255,255,0.8);
+            font-weight: 600; letter-spacing: .3px;
+        }
+        .form-iframe {
+            width: 100%; height: 680px;
+            border: none; display: block;
+        }
+
+        /* ── STATS SECTION ── */
+        .stats-section {
+            background: var(--red);
+            padding: 3rem 2.5rem;
+            border-top: 4px solid var(--gold);
+            border-bottom: 4px solid var(--gold);
+        }
+        .stats-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem; text-align: center;
+        }
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem; font-weight: 800;
+            color: var(--gold); line-height: 1;
+            margin-bottom: .4rem;
+        }
+        .stat-label {
+            font-size: .78rem; font-weight: 700;
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* ── ABOUT SECTION ── */
+        .about-section {
+            background: white;
+            padding: 4rem 2.5rem;
+        }
+        .about-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 4rem; align-items: start;
+        }
+        .about-text .label {
+            display: inline-block;
+            background: var(--red); color: var(--gold);
+            font-size: .68rem; font-weight: 700;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            padding: .3rem .8rem; border-radius: 3px;
+            margin-bottom: .85rem;
+        }
+        .about-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem; color: var(--red); font-weight: 700;
+            line-height: 1.2; margin-bottom: .6rem;
+        }
+        .about-text .divider { width: 48px; height: 3px; background: var(--gold); border-radius: 2px; margin-bottom: 1rem; }
+        .about-text p { font-size: .9rem; color: var(--gray); line-height: 1.8; margin-bottom: 1rem; }
+        .about-text a {
+            display: inline-flex; align-items: center; gap: .4rem;
+            background: var(--red); color: white;
+            padding: .7rem 1.5rem; border-radius: 4px;
+            font-size: .85rem; font-weight: 700;
+            text-decoration: none; text-transform: uppercase; letter-spacing: .5px;
+            transition: background .2s;
+        }
+        .about-text a:hover { background: var(--red-lt); }
+
+        .values-list { display: flex; flex-direction: column; gap: .75rem; }
+        .value-item {
+            display: flex; align-items: flex-start; gap: .85rem;
+            padding: .9rem 1rem;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--gold);
+            border-radius: 6px;
+            background: var(--cream);
+        }
+        .val-icon {
+            width: 34px; height: 34px; border-radius: 6px;
+            background: var(--red); color: var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            font-size: .95rem; flex-shrink: 0;
+        }
+        .val-text strong { display: block; font-size: .85rem; color: var(--dark); font-weight: 700; margin-bottom: .15rem; }
+        .val-text span { font-size: .78rem; color: var(--gray); line-height: 1.5; }
+
+        /* ── CONTACT / FOOTER ── */
+        .contact-section {
+            background: var(--red);
+            padding: 3rem 2.5rem 0;
+        }
+        .contact-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
+            gap: 2.5rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+        .contact-col h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem; color: var(--gold);
+            font-weight: 700; margin-bottom: .6rem;
+            padding-bottom: .5rem;
+            border-bottom: 2px solid rgba(200,169,81,0.3);
+        }
+        .contact-col p, .contact-col a {
+            font-size: .82rem; color: rgba(255,255,255,0.7);
+            line-height: 1.85; text-decoration: none; display: block;
+        }
+        .contact-col a:hover { color: var(--gold-lt); }
+        .contact-logo {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: white; border: 3px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 800; font-size: .9rem; color: var(--red);
+            text-align: center; line-height: 1.1;
+            margin-bottom: .85rem;
+        }
+
+        .footer-bottom {
+            max-width: 1100px; margin: 0 auto;
+            padding: 1.25rem 0;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: .75rem;
+        }
+        .footer-bottom p { font-size: .75rem; color: rgba(255,255,255,0.4); }
+        .footer-bottom a { color: var(--gold-lt); text-decoration: none; font-size: .75rem; }
+
+        /* ── RESPONSIVE ── */
+
+        /* ── Hamburger / mobile nav ── */
+        .nav-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 38px;
+            height: 38px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: background .2s;
+        }
+        .nav-hamburger:hover { background: rgba(139,0,0,.08); }
+        .nav-hamburger span {
+            display: block;
+            width: 24px;
+            height: 2.5px;
+            background: var(--red);
+            border-radius: 2px;
+            transition: transform .3s, opacity .3s;
+        }
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        .nav-mobile-drawer {
+            display: none;
+            flex-direction: column;
+            background: white;
+            border-bottom: 3px solid var(--red);
+            box-shadow: 0 4px 12px rgba(0,0,0,.1);
+            padding: .5rem 1rem .75rem;
+            position: sticky;
+            top: 65px;
+            z-index: 99;
+        }
+        .nav-mobile-drawer.open { display: flex; }
+        .nav-mobile-drawer a {
+            color: var(--dark);
+            text-decoration: none;
+            font-size: .85rem;
+            font-weight: 700;
+            padding: .6rem .75rem;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            transition: background .2s, color .2s;
+        }
+        .nav-mobile-drawer a:hover,
+        .nav-mobile-drawer a.active { background: var(--red); color: white; }
+        .nav-mobile-drawer .nav-enroll {
+            background: var(--gold) !important;
+            color: var(--dark) !important;
+            margin-top: .25rem;
+        }
+        @media (max-width: 900px) {
+            .nav-hamburger { display: flex; }
+        }
+        @media (max-width: 900px) {
+            nav { padding: .6rem 1rem; }
+            .nav-links { display: none; }
+            .topbar { padding: .4rem 1rem; }
+            .topbar-left { display: none; }
+            .programs-grid { grid-template-columns: repeat(3, 1fr); }
+            .enroll-layout { grid-template-columns: 1fr; }
+            .steps-col { display: grid; grid-template-columns: 1fr 1fr; }
+            .stats-inner { grid-template-columns: repeat(2, 1fr); }
+            .about-inner { grid-template-columns: 1fr; gap: 2rem; }
+            .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+            .enrollment-section, .about-section, .programs-strip { padding: 2.5rem 1.25rem; }
+            .contact-section { padding: 2.5rem 1.25rem 0; }
+            .hero { height: 380px; }
+        }
+        @media (max-width: 600px) {
+            .programs-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps-col { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="topbar-left">
+        <span>#AllevoSCC — Challenges Minds · Moves Hearts · Changes Lives</span>
+    </div>
+    <div class="topbar-right">
+        <span>📞 <a id="brandPhoneLink" href="tel:032-268-4746"><span id="brandPhone">(032) 268-4746</span></a></span>
+        <span>✉ <a id="brandEmailLink" href="mailto:info@stcecilia.edu.ph"><span id="brandEmail">info@stcecilia.edu.ph</span></a></span>
+        <span>🌐 <a id="brandWebsiteLink" href="https://stcecilia.edu.ph" target="_blank"><span id="brandWebsite">stcecilia.edu.ph</span></a></span>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="index.html" class="nav-brand">
+        <div class="nav-logo"><img id="brandLogoNav" src="images/logo2.jpg" alt="School Logo"></div>
+        <div class="nav-name">
+            <strong id="brandNameNav">St. Cecilia's College-Cebu, Inc.</strong>
+            <span id="brandAddressNav">Poblacion Ward II, Minglanilla, Cebu — Est. 1999</span>
+        </div>
+    </a>
+        <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="index.html#about">About Us</a>
+        <a href="login.html">Login</a>
+        <a href="enrollment.html" class="nav-enroll">Enroll Now</a>
+    </div>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="nav-mobile-drawer" id="navMobileDrawer">
+    <a href="index.html" class="active">Home</a>
+    <a href="index.html#about">About Us</a>
+    <a href="login.html">Login</a>
+    <a href="enrollment.html" class="nav-enroll">Enroll Now</a>
+</div>
+
+<!-- HERO SLIDER -->
+<div class="hero">
+    <div class="slides-wrap">
+        <div class="slide s1">
+            <div class="slide-bg"></div>
+            <div class="slide-inner">
+                <div class="tag">SY 2025–2026 Enrollment Open</div>
+                <h1>"Challenges Minds...<br>Moves Hearts...<br><em>Changes Lives"</em></h1>
+                <div class="gold-bar"></div>
+                <p><span id="brandNameHero">St. Cecilia's College-Cebu, Inc.</span> — A center of excellence in Academics, Technology, and the Arts.</p>
+                
+                <a href="login.html" class="slide-btn-ghost">Student Login</a>
+            </div>
+        </div>
+        <div class="slide s2">
+            <div class="slide-bg"></div>
+            <div class="slide-inner">
+                <div class="tag">Basic Education</div>
+                <h1>From Preschool<br>to <em>Senior High</em></h1>
+                <div class="gold-bar"></div>
+                <p>Nurturing every student from their earliest years through comprehensive K–12 education.</p>
+                
+            </div>
+        </div>
+        <div class="slide s3">
+            <div class="slide-bg"></div>
+            <div class="slide-inner">
+                <div class="tag">College Programs</div>
+                <h1>Globally Competitive<br><em>Cecilian</em> Graduates</h1>
+                <div class="gold-bar"></div>
+                <p>TESDA-accredited programs in IT, Education, Business, Criminology, and Hospitality Management.</p>
+                
+            </div>
+        </div>
+        <div class="slide s4">
+            <div class="slide-bg"></div>
+            <div class="slide-inner">
+                <div class="tag">Scholarships Available</div>
+                <h1>FREE Senior High<br>via <em>DepEd Voucher</em></h1>
+                <div class="gold-bar"></div>
+                <p>Academic, cultural, and government scholarships available for qualified students.</p>
+                
+            </div>
+        </div>
+        <div class="slide s5">
+            <div class="slide-bg"></div>
+            <div class="slide-inner">
+                <div class="tag">HyFlex Ready</div>
+                <h1>Join the<br><em>Cecilian Family</em> Today</h1>
+                <div class="gold-bar"></div>
+                <p>Flexible learning options, state-of-the-art facilities, and a vibrant Cecilian community await you.</p>
+                
+                <a href="login.html" class="slide-btn-ghost">Sign In</a>
+            </div>
+        </div>
+    </div>
+    <div class="slide-dots">
+        <div class="sdot on"></div>
+        <div class="sdot"></div>
+        <div class="sdot"></div>
+        <div class="sdot"></div>
+        <div class="sdot"></div>
+    </div>
+</div>
+
+<!-- PROGRAMS STRIP -->
+<div class="programs-strip">
+    <div class="programs-inner">
+        <div class="strip-label">Our Programs</div>
+        <div class="strip-title">What We Offer</div>
+        <div class="strip-divider"></div>
+        <div class="programs-grid">
+            <div class="prog-card">
+                <div class="prog-icon">🧸</div>
+                <div class="prog-name">Preschool</div>
+                <div class="prog-desc">Nurturing young minds through play-based learning.</div>
+            </div>
+            <div class="prog-card">
+                <div class="prog-icon">🌟</div>
+                <div class="prog-name">SPED</div>
+                <div class="prog-desc">Personalized and inclusive education for all learners.</div>
+            </div>
+            <div class="prog-card">
+                <div class="prog-icon">📚</div>
+                <div class="prog-name">Grade School</div>
+                <div class="prog-desc">Building strong foundations in a nurturing environment.</div>
+            </div>
+            <div class="prog-card">
+                <div class="prog-icon">🔬</div>
+                <div class="prog-name">Junior High</div>
+                <div class="prog-desc">Developing critical thinking and leadership skills.</div>
+            </div>
+            <div class="prog-card">
+                <div class="prog-icon">🎓</div>
+                <div class="prog-name">Senior High</div>
+                <div class="prog-desc">Specialized strands preparing students for college.</div>
+            </div>
+            <div class="prog-card">
+                <div class="prog-icon">🏛️</div>
+                <div class="prog-name">College</div>
+                <div class="prog-desc">Rigorous higher education programs with TESDA accreditation.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ENROLLMENT SECTION -->
+
+
+<!-- STATS -->
+<div class="stats-section">
+    <div class="stats-inner">
+        <div>
+            <div class="stat-num">100%</div>
+            <div class="stat-label">NC II Holder Passing Rate</div>
+        </div>
+        <div>
+            <div class="stat-num">7,000+</div>
+            <div class="stat-label">Students Enrolled</div>
+        </div>
+        <div>
+            <div class="stat-num">88%</div>
+            <div class="stat-label">LPT Passing Rate</div>
+        </div>
+        <div>
+            <div class="stat-num">32</div>
+            <div class="stat-label">Awards & Recognition</div>
+        </div>
+    </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+    <div class="about-inner">
+        <div class="about-text">
+            <div class="label">About Us</div>
+            <h2>Our Vision &<br>Mission</h2>
+            <div class="divider"></div>
+            <p>SCC is a non-stock, non-profit educational institution that envisions itself to be a Center of Excellence in Academics, Technology, and the Arts. It aspires to produce professionals and leaders who are globally competitive, imbued with Christian values, integrity, patriotism and stewardship.</p>
+            <p>Through quality human education, <span id="brandNameMission">St. Cecilia's College</span> commits itself to cultivating Christian values, providing knowledge and skills, and fostering love for country and service to fellowmen.</p>
+            <a id="brandWebsiteAbout" href="https://stcecilia.edu.ph" target="_blank">Visit Official Website →</a>
+        </div>
+
+        <div class="values-list">
+            <div class="value-item">
+                <div class="val-icon">✝️</div>
+                <div class="val-text">
+                    <strong>Christ-centeredness</strong>
+                    <span>Putting Christ at the center of thoughts and actions for the common good.</span>
+                </div>
+            </div>
+            <div class="value-item">
+                <div class="val-icon">⭐</div>
+                <div class="val-text">
+                    <strong>Excellence</strong>
+                    <span>Strong desire to excel in imparting knowledge and skills with enthusiasm.</span>
+                </div>
+            </div>
+            <div class="value-item">
+                <div class="val-icon">🤝</div>
+                <div class="val-text">
+                    <strong>Integrity</strong>
+                    <span>Acting in an honest and trustworthy manner based on moral conviction.</span>
+                </div>
+            </div>
+            <div class="value-item">
+                <div class="val-icon">🌍</div>
+                <div class="val-text">
+                    <strong>Love of Country</strong>
+                    <span>Prioritizing the national interest and active participation in community service.</span>
+                </div>
+            </div>
+            <div class="value-item">
+                <div class="val-icon">💡</div>
+                <div class="val-text">
+                    <strong>Innovativeness</strong>
+                    <span>Open-minded, dynamic, and resourceful in creating and learning new things.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CAREERS SECTION -->
+
+
+<!-- CONTACT / FOOTER -->
+<div class="contact-section">
+    <div class="contact-inner">
+        <div class="contact-col">
+            <div class="contact-logo" id="brandLogoContact">SCC<br>CI</div>
+            <p><span id="brandNameContact">St. Cecilia's College-Cebu, Inc.</span><br><span id="brandAddressContact">Poblacion Ward II, Minglanilla, Cebu Philippines, 6046</span></p>
+        </div>
+        <div class="contact-col">
+            <h4>Contact Us</h4>
+            <a id="brandRegistrarPhoneLink" href="tel:032-326-3677">📞 Registrar's Office: <span id="brandRegistrarPhone">(032) 326-3677</span></a>
+            <a href="tel:032-490-0767">📞 Accounting: 490-0767</a>
+            <a href="tel:032-512-8068">📞 Marketing/Scholarship: (032) 512-8068</a>
+            <a href="tel:032-326-3539">📞 Grade/JH School: (032) 326-3539</a>
+            <a id="brandEmailLink2" href="mailto:info@stcecilia.edu.ph">✉ <span id="brandEmail2">info@stcecilia.edu.ph</span></a>
+        </div>
+        <div class="contact-col">
+            <h4>Quick Links</h4>
+            <a href="index.html">Home</a>
+            <a href="login.html">Student Login</a>
+            <a id="brandWebsiteQuick" href="https://stcecilia.edu.ph" target="_blank">Official Website</a>
+            <a id="brandFacebookLink" href="https://www.facebook.com/St.CeciliasCollege" target="_blank">Facebook Page</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 <span id="brandNameFooter">St. Cecilia's College-Cebu, Inc.</span> · All rights reserved</p>
+        <a id="brandWebsiteFooter" href="https://stcecilia.edu.ph" target="_blank"><span id="brandWebsiteFooterText">stcecilia.edu.ph</span></a>
+    </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Slider dots sync
+    const dots = document.querySelectorAll('.sdot');
+    let cur = 0;
+    const total = 5;
+    setInterval(() => {
+        dots[cur].classList.remove('on');
+        cur = (cur + 1) % total;
+        dots[cur].classList.add('on');
+    }, 4000);
+
+    // Step highlight on click
+    const steps = document.querySelectorAll('.step-item');
+    steps.forEach(s => {
+        s.addEventListener('click', () => {
+            steps.forEach(x => x.classList.remove('active'));
+            s.classList.add('active');
+        });
+    });
+
+        // Scroll-in animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.style.opacity = '1';
+                    observer.unobserve(e.target);
+                }
+            });
+        });
+        document.querySelectorAll('.prog-card, .value-item, .step-item').forEach(el => observer.observe(el));
+
+    // ── Nav scroll-spy: highlight active link based on visible section ──
+    (function() {
+        const navLinks = document.querySelectorAll('.nav-links a:not(.nav-enroll)');
+
+        function setActive(href) {
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === href) {
+                    a.classList.add('active');
+                }
+            });
+        }
+
+        // Use IntersectionObserver to detect which section is in view
+        const sections = [
+            { id: 'about',      href: 'index.html#about' },
+            
+        ];
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const matched = sections.find(s => s.id === entry.target.id);
+                    if (matched) setActive(matched.href);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        sections.forEach(s => {
+            const el = document.getElementById(s.id);
+            if (el) sectionObserver.observe(el);
+        });
+
+        // When scrolled back to top, highlight Home
+        window.addEventListener('scroll', () => {
+            if (window.scrollY < 100) setActive('index.html');
+        });
+
+        // On hash change (clicking nav links)
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash;
+            if (!hash) setActive('index.html');
+            else setActive('index.html' + hash);
+        });
+    })();
+
+    // Mobile nav toggle
+    const hamburger = document.getElementById('navHamburger');
+    const drawer = document.getElementById('navMobileDrawer');
+    if (hamburger && drawer) {
+        hamburger.addEventListener('click', () => {
+            const open = drawer.classList.toggle('open');
+            hamburger.classList.toggle('open', open);
+            hamburger.setAttribute('aria-expanded', open);
+        });
+        drawer.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                drawer.classList.remove('open');
+                hamburger.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', false);
+            });
+        });
+    }
+    </script>
+<script>
+// ── Dynamic Branding (school name + logo from admin settings) ─────────
+(async function applyBranding() {
+    try {
+        const res  = await fetch('api/shared/get_branding_public.php');
+        const data = await res.json();
+        if (!data.success) return;
+
+        const name     = data.school_name     || '';
+        const logo     = data.school_logo     || '';
+        const address  = data.school_address  || '';
+        const phone    = data.school_phone    || '';
+        const regPhone = data.registrar_phone || '';
+        const email    = data.school_email    || '';
+        const website  = data.school_website  || '';
+        const facebook = data.school_facebook || '';
+
+        // Update all name text elements
+        ['brandNameNav','brandNameHero','brandNameContact','brandNameFooter','brandNameMission'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el && name) el.textContent = name;
+        });
+
+        // Update address in navbar and contact section
+        if (address) {
+            const addrNav = document.getElementById('brandAddressNav');
+            if (addrNav) addrNav.textContent = address;
+            const addrContact = document.getElementById('brandAddressContact');
+            if (addrContact) addrContact.textContent = address;
+        }
+
+        // Update phone in topbar
+        if (phone) {
+            const ph = document.getElementById('brandPhone');
+            const phLink = document.getElementById('brandPhoneLink');
+            if (ph) ph.textContent = phone;
+            if (phLink) phLink.href = 'tel:' + phone.replace(/\D/g, '');
+        }
+
+        // Update email everywhere
+        if (email) {
+            ['brandEmail','brandEmail2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = email;
+            });
+            ['brandEmailLink','brandEmailLink2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.href = 'mailto:' + email;
+            });
+        }
+
+        // Update registrar phone in footer contact
+        if (regPhone) {
+            const rph = document.getElementById('brandRegistrarPhone');
+            const rphLink = document.getElementById('brandRegistrarPhoneLink');
+            if (rph) rph.textContent = regPhone;
+            if (rphLink) rphLink.href = 'tel:' + regPhone.replace(/\D/g, '');
+        }
+
+        // Update all website links
+        if (website) {
+            const displayUrl = website.replace(/^https?:\/\//, '');
+            ['brandWebsiteLink','brandWebsiteAbout','brandWebsiteQuick','brandWebsiteFooter'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.href = website;
+            });
+            const ws = document.getElementById('brandWebsite');
+            if (ws) ws.textContent = displayUrl;
+            const wsf = document.getElementById('brandWebsiteFooterText');
+            if (wsf) wsf.textContent = displayUrl;
+        }
+
+        // Update Facebook link
+        if (facebook) {
+            const fb = document.getElementById('brandFacebookLink');
+            if (fb) fb.href = facebook;
+        }
+
+        // Update page title
+        if (name) document.title = name + ' — Student Enrollment Portal';
+
+        // Update navbar logo image
+        if (logo) {
+            const img = document.getElementById('brandLogoNav');
+            if (img) { img.src = logo; img.alt = name + ' Logo'; }
+
+            // Replace contact-logo text with actual logo image
+            const contactLogo = document.getElementById('brandLogoContact');
+            if (contactLogo) {
+                contactLogo.innerHTML = `<img src="${logo}" alt="${name} Logo" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">`;
+            }
+        }
+    } catch (e) { /* silently keep defaults */ }
+})();
+</script>
