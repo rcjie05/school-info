@@ -61,7 +61,7 @@ if (!@getimagesize($file['tmp_name'])) {
     exit();
 }
 
-$projectRoot = dirname(__DIR__, 2); // api/admin -> project root
+$projectRoot = dirname(__DIR__, 3); // php/api/admin -> root
 $uploadDir   = $projectRoot . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'rooms' . DIRECTORY_SEPARATOR;
 
 if (!is_dir($uploadDir)) {

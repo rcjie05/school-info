@@ -38,7 +38,7 @@ if (!$user || empty($user['avatar_url'])) {
 
 // Move file to deleted_avatars/ folder instead of permanent delete
 // avatar_url is stored as a clean relative path e.g. "uploads/avatars/avatar_1_123.jpg"
-$projectRoot = dirname(__DIR__, 2); // 2 levels up from api/admin/
+$projectRoot = dirname(__DIR__, 3); // 3 levels up from php/api/admin/
 $oldRelative = ltrim($user['avatar_url'], '/');
 if (strpos($oldRelative, 'uploads/') !== false) {
     $oldRelative = 'uploads/' . substr($oldRelative, strpos($oldRelative, 'uploads/') + 8);

@@ -267,91 +267,6 @@ requireRole('admin');
 
         /* ── TABLE ACTION CELL ── */
         .action-cell { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; align-items: center; min-width: 220px; }
-
-        /* ══════════════════════════════════════════════════════
-           MOBILE RESPONSIVE — USER MANAGEMENT
-           ══════════════════════════════════════════════════════ */
-
-        /* User card layout (shown on mobile instead of table rows) */
-        .user-card {
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1rem 1.1rem;
-            margin-bottom: 0.75rem;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-            display: none; /* hidden on desktop */
-        }
-        .user-card-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 0.6rem; gap: 0.5rem;
-        }
-        .user-card-name {
-            font-weight: 700; font-size: 0.95rem; color: #111827;
-            flex: 1; min-width: 0; overflow: hidden;
-            text-overflow: ellipsis; white-space: nowrap;
-        }
-        .user-card-meta {
-            display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem;
-            font-size: 0.78rem; color: #6b7280; margin-bottom: 0.75rem;
-        }
-        .user-card-meta span { display: flex; align-items: center; gap: 0.25rem; }
-        .user-card-actions {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 0.4rem; margin-top: 0.6rem;
-        }
-        .user-card-actions .btn-action {
-            min-width: unset !important; width: 100% !important; font-size: 0.72rem; padding: 0.45rem 0.5rem;
-        }
-        .user-card-susp {
-            font-size: 0.74rem; padding: 0.35rem 0.6rem;
-            background: #fff7ed; border: 1px solid #fed7aa;
-            border-radius: 6px; margin-bottom: 0.5rem; color: #9a3412;
-        }
-
-        @media (max-width: 768px) {
-            /* Hide desktop table, show cards */
-            #usersTable table, #archivedTable table { display: none !important; }
-            .user-card { display: block !important; }
-
-            /* Page header: stack title + button */
-            .page-header {
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                gap: 0.75rem !important;
-                padding: 1rem 1rem 0.75rem !important;
-            }
-            .page-header .btn { width: 100% !important; justify-content: center !important; }
-
-            /* Tabs: full width equal split */
-            .tab-bar { gap: 0 !important; }
-            .tab-btn { flex: 1 !important; text-align: center !important; font-size: 0.8rem !important; padding: 0.6rem 0.5rem !important; }
-
-            /* Filter bar: stack vertically */
-            .filter-bar {
-                flex-direction: column !important;
-                gap: 0.5rem !important;
-                padding: 0.75rem !important;
-            }
-            .filter-bar select,
-            .filter-bar input[type="text"] {
-                width: 100% !important;
-                height: 44px !important;
-                font-size: 16px !important; /* prevent iOS zoom */
-            }
-
-            /* Content card */
-            .content-card { padding: 0.85rem !important; }
-
-            /* Add New User button in header */
-            #addUserBtn, .btn-primary { min-height: 44px; }
-        }
-
-        @media (max-width: 480px) {
-            .user-card { padding: 0.85rem; }
-            .user-card-name { font-size: 0.88rem; }
-            .user-card-actions { grid-template-columns: 1fr 1fr; gap: 0.35rem; }
-        }
     </style>
     <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
@@ -567,7 +482,6 @@ requireRole('admin');
     </div>
 </div>
 
-<script src="../../js/enhancements.js"></script>
 <script>
 let departments = [];
 
@@ -641,34 +555,25 @@ async function loadUsers() {
             <th>Suspension Info</th><th>Created</th><th>Actions</th>
         </tr></thead><tbody>`;
 
-        let cards = '';
-
         data.users.forEach(user => {
             const isInactive = user.status === 'inactive';
             // Only active or approved users can be suspended (not pending/rejected)
             const isSuspendable = user.status === 'active' || user.status === 'approved';
 
             let suspInfo = '—';
-            let suspCard = '';
             if (isInactive && user.deactivated_until) {
                 const until = new Date(user.deactivated_until);
-                if (until > new Date()) {
-                    suspInfo = `<span style="color:var(--status-rejected);font-size:0.75rem;">Until: ${until.toLocaleDateString()} ${until.toLocaleTimeString()}</span>`;
-                    suspCard = `<div class="user-card-susp">⏸ Suspended until ${until.toLocaleDateString()}</div>`;
-                } else {
-                    suspInfo = `<span style="color:#9ca3af;font-size:0.75rem;" title="Suspension period has passed — click Activate to restore access">⏰ Expired (needs manual activation)</span>`;
-                    suspCard = `<div class="user-card-susp" style="background:#f3f4f6;border-color:#e5e7eb;color:#6b7280;">⏰ Suspension expired — needs activation</div>`;
-                }
+                suspInfo = until > new Date()
+                    ? `<span style="color:var(--status-rejected);font-size:0.75rem;">Until: ${until.toLocaleDateString()} ${until.toLocaleTimeString()}</span>`
+                    : `<span style="color:#9ca3af;font-size:0.75rem;" title="Suspension period has passed — click Activate to restore access">⏰ Expired (needs manual activation)</span>`;
             } else if (isInactive) {
                 suspInfo = `<span style="color:var(--status-rejected);font-size:0.75rem;">Permanent</span>`;
-                suspCard = `<div class="user-card-susp">🚫 Permanently suspended</div>`;
             }
 
             const suspBtn = isSuspendable
                 ? `<button class="btn-action btn-suspend" onclick="openSuspensionModal(${user.id},'${user.name.replace(/'/g,"\\'")}','${user.role}')">⏸ Suspend</button>`
                 : `<button class="btn-action btn-activate" onclick="activateUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">✅ Activate</button>`;
 
-            // Desktop table row
             html += `<tr>
                 <td>${user.name}</td>
                 <td>${user.email}</td>
@@ -683,29 +588,9 @@ async function loadUsers() {
                     <button class="btn-action btn-delete" onclick="deleteUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">🗑️ Delete</button>
                 </td>
             </tr>`;
-
-            // Mobile card
-            cards += `<div class="user-card">
-                <div class="user-card-header">
-                    <span class="user-card-name">${user.name}</span>
-                    ${sccRoleBadge(user.role)}
-                </div>
-                <div class="user-card-meta">
-                    <span>✉️ ${user.email}</span>
-                    <span><span class="status-badge status-${user.status}" style="font-size:0.7rem;">${user.status}</span></span>
-                    <span>📅 ${user.created_date}</span>
-                </div>
-                ${suspCard}
-                <div class="user-card-actions">
-                    <button class="btn-action btn-edit" onclick='editUser(${JSON.stringify(user)})'>✏️ Edit</button>
-                    ${suspBtn}
-                    <button class="btn-action btn-archive" onclick="archiveUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">🗃️ Archive</button>
-                    <button class="btn-action btn-delete" onclick="deleteUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">🗑️ Delete</button>
-                </div>
-            </div>`;
         });
         html += '</tbody></table>';
-        document.getElementById('usersTable').innerHTML = html + cards;
+        document.getElementById('usersTable').innerHTML = html;
         sccMakeSortable('#usersTable table');
     } catch(e) {
         document.getElementById('countActive').textContent = '!';
@@ -745,12 +630,8 @@ async function loadArchivedUsers() {
             <th>Created</th><th>Archived On</th><th>Actions</th>
         </tr></thead><tbody>`;
 
-        let cards = '';
-
         data.users.forEach(user => {
             const info = user.course || user.department || '—';
-
-            // Desktop row
             html += `<tr class="archived-row">
                 <td>${user.name} <span class="badge-archived">archived</span></td>
                 <td>${user.email}</td>
@@ -763,27 +644,9 @@ async function loadArchivedUsers() {
                     <button class="btn-action btn-delete-forever" onclick="permanentlyDelete(${user.id},'${user.name.replace(/'/g,"\\'")}')">🗑️ Delete Forever</button>
                 </td>
             </tr>`;
-
-            // Mobile card
-            cards += `<div class="user-card" style="opacity:0.85;">
-                <div class="user-card-header">
-                    <span class="user-card-name">${user.name} <span class="badge-archived">archived</span></span>
-                    ${sccRoleBadge(user.role)}
-                </div>
-                <div class="user-card-meta">
-                    <span>✉️ ${user.email}</span>
-                    ${info !== '—' ? `<span>🏫 ${info}</span>` : ''}
-                    <span>📅 Created: ${user.created_date}</span>
-                    <span>🗃️ Archived: ${user.archived_date}</span>
-                </div>
-                <div class="user-card-actions">
-                    <button class="btn-action btn-restore" onclick="restoreUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">♻️ Restore</button>
-                    <button class="btn-action btn-delete-forever" onclick="permanentlyDelete(${user.id},'${user.name.replace(/'/g,"\\'")}')">🗑️ Delete Forever</button>
-                </div>
-            </div>`;
         });
         html += '</tbody></table>';
-        document.getElementById('archivedTable').innerHTML = html + cards;
+        document.getElementById('archivedTable').innerHTML = html;
     } catch(e) {
         document.getElementById('countArchived').textContent = '!';
         document.getElementById('archivedTable').innerHTML = '<p style="text-align:center;color:#ef4444;padding:2rem;">⚠️ Error loading archived users. Please refresh the page or check your session.</p>';
@@ -949,9 +812,12 @@ async function confirmSuspension(e) {
 }
 
 /* ── Init ── */
-loadDepartments();
-loadUsers();
-loadArchivedUsers();
+// Defer init until ALL scripts (including enhancements.js) are loaded
+document.addEventListener('DOMContentLoaded', function () {
+    loadDepartments();
+    loadUsers();
+    loadArchivedUsers();
+});
 </script>
 
 <script>
@@ -1045,5 +911,6 @@ function togglePass(fieldId, btn) {
     btn.style.color = isHidden ? 'var(--primary-purple, #8b0000)' : '';
 }
 </script>
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

@@ -5,38 +5,16 @@ ini_set('display_errors', 0);
 require_once '../../php/config.php';
 ob_clean();
 header('Content-Type: application/json');
-
-// ── Dynamic school name & school year ────────────────────────────────
-$_sn_conn = getDBConnection();
-$_sn_res  = $_sn_conn ? $_sn_conn->query("SELECT setting_key, setting_value FROM system_settings WHERE setting_key IN ('school_name','current_school_year')") : false;
-$school_name = 'My School';
-$current_school_year = '----';
-if ($_sn_res) { while ($_sn_row = $_sn_res->fetch_assoc()) { if ($_sn_row['setting_key']==='school_name') $school_name=$_sn_row['setting_value']; if ($_sn_row['setting_key']==='current_school_year') $current_school_year=$_sn_row['setting_value']; } }
-// ──────────────────────────────────────────────────────────────────────
 requireRole('hr');
 
 $conn   = getDBConnection();
 $target = isset($_GET['target']) ? $_GET['target'] : null;
 
-$sql = "
-    SELECT
-        a.id,
-        a.title,
-        a.content,
-        a.target_audience,
-        a.priority,
-        u.name as posted_by_name,
-        DATE_FORMAT(a.created_at, '%M %d, %Y %h:%i %p') as date
-    FROM announcements a
-    JOIN users u ON a.posted_by = u.id
-    WHERE (a.target_audience = 'all' OR a.target_audience = 'staff')
-    AND a.deleted_at IS NULL
-";
-
 $params = [];
 $types  = "";
 
 if ($target) {
+    // Specific filter selected: show only that exact audience
     $sql = "
         SELECT
             a.id,
@@ -53,6 +31,22 @@ if ($target) {
     ";
     $params[] = $target;
     $types   .= "s";
+} else {
+    // No filter: show all announcements relevant to HR/staff
+    $sql = "
+        SELECT
+            a.id,
+            a.title,
+            a.content,
+            a.target_audience,
+            a.priority,
+            u.name as posted_by_name,
+            DATE_FORMAT(a.created_at, '%M %d, %Y %h:%i %p') as date
+        FROM announcements a
+        JOIN users u ON a.posted_by = u.id
+        WHERE (a.target_audience = 'all' OR a.target_audience = 'staff')
+        AND a.deleted_at IS NULL
+    ";
 }
 
 $sql .= " ORDER BY a.created_at DESC";

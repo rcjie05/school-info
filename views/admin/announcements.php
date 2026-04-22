@@ -1,13 +1,5 @@
 <?php
 require_once '../../php/config.php';
-
-// ── Dynamic school name & school year ────────────────────────────────
-$_sn_conn = getDBConnection();
-$_sn_res  = $_sn_conn ? $_sn_conn->query("SELECT setting_key, setting_value FROM system_settings WHERE setting_key IN ('school_name','current_school_year')") : false;
-$school_name = 'My School';
-$current_school_year = '----';
-if ($_sn_res) { while ($_sn_row = $_sn_res->fetch_assoc()) { if ($_sn_row['setting_key']==='school_name') $school_name=$_sn_row['setting_value']; if ($_sn_row['setting_key']==='current_school_year') $current_school_year=$_sn_row['setting_value']; } }
-// ──────────────────────────────────────────────────────────────────────
 requireRole('admin');
 ?>
 <!DOCTYPE html>
@@ -77,6 +69,8 @@ requireRole('admin');
         .fb-media-grid.count-1 .fb-media-item { max-height: 500px; }
         .fb-media-grid:not(.count-1) .fb-media-item { height: 240px; }
         .fb-media-item img, .fb-media-item video { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.2s; }
+        .fb-media-grid.count-1 .fb-media-item img { height: auto; max-height: 500px; object-fit: contain; }
+        .fb-media-grid.count-1 .fb-media-item video { height: auto; max-height: 500px; object-fit: contain; }
         .fb-media-item:hover img, .fb-media-item:hover video { transform: scale(1.03); }
         .fb-media-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.6rem; font-weight: 700; }
         .fb-file-attachments { padding: 0.5rem 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
@@ -214,6 +208,7 @@ requireRole('admin');
                     <option value="students">🎓 Students</option>
                     <option value="teachers">👨‍🏫 Teachers</option>
                     <option value="registrar">📋 Registrars</option>
+                    <option value="staff">🏢 Staff (HR)</option>
                     <option value="admin">🔑 Admins</option>
                 </select>
             </div>
@@ -278,6 +273,7 @@ requireRole('admin');
                             <option value="students">🎓 Students</option>
                             <option value="teachers">👨‍🏫 Teachers</option>
                             <option value="registrar">📋 Registrars</option>
+                            <option value="staff">🏢 Staff (HR)</option>
                             <option value="admin">🔑 Admins</option>
                         </select>
                     </div>
