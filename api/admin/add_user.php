@@ -19,7 +19,7 @@ ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../../error.log');
 
 // Check authentication
-requireRole('admin');
+requireRoleApi('admin');
 
 $conn = getDBConnection();
 

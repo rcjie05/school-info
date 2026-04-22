@@ -13,7 +13,7 @@ $school_name = 'My School';
 $current_school_year = '----';
 if ($_sn_res) { while ($_sn_row = $_sn_res->fetch_assoc()) { if ($_sn_row['setting_key']==='school_name') $school_name=$_sn_row['setting_value']; if ($_sn_row['setting_key']==='current_school_year') $current_school_year=$_sn_row['setting_value']; } }
 // ──────────────────────────────────────────────────────────────────────
-requireRole('admin');
+requireRoleApi('admin');
 
 $conn = getDBConnection();
 $admin_id = $_SESSION['user_id'];

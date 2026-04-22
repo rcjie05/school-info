@@ -50,6 +50,7 @@ requireRole('admin');
         .upcoming-item  { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid #f0f0f0; font-size: 0.875rem; }
         .upcoming-item:last-child { border-bottom: none; }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
 <div class="page-wrapper">
@@ -253,5 +254,6 @@ loadDashboard();
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

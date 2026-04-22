@@ -69,6 +69,7 @@ $fullName = $_SESSION['name'] ?? 'Administrator';
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -330,5 +331,6 @@ $fullName = $_SESSION['name'] ?? 'Administrator';
 <!-- Mobile Bottom Navigation -->
     <script src="../../js/session-monitor.js"></script>
     <script src="../../js/apply-branding.js"></script>
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

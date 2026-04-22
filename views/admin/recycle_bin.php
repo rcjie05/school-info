@@ -88,6 +88,7 @@ requireRole('admin');
         .search-bar { padding:.5rem .85rem; border:1px solid #ddd; border-radius:var(--radius-md); width:100%; max-width:360px; font-size:.9rem; }
         .toolbar { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.25rem; }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
 <div id="toast"></div>
@@ -404,5 +405,6 @@ loadBin();
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

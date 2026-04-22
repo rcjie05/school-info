@@ -139,6 +139,7 @@ requireRole('admin');
         /* section count pill */
         .count-pill { background: #ede9fe; color: var(--primary-purple); padding: 0.1rem 0.5rem; border-radius: 0.9rem; font-size: 0.75rem; font-weight: 700; }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
 <div class="page-wrapper">
@@ -1364,5 +1365,6 @@ loadSections();
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

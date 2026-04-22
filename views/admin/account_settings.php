@@ -73,6 +73,7 @@ $initials   = strtoupper(substr($user['name'] ?? 'A', 0, 1));
         .pw-eye-btn:hover { color: var(--primary-purple, #8b0000); }
 
         </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -378,5 +379,6 @@ function togglePass(fieldId, btn) {
     btn.style.color = isHidden ? 'var(--primary-purple, #8b0000)' : '';
 }
 </script>
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

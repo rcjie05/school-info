@@ -47,6 +47,7 @@ requireRole('admin');
         .filter-bar { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
         .filter-bar select, .filter-bar input { padding: 0.5rem; border: 1px solid #ddd; border-radius: var(--radius-md); }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -780,5 +781,6 @@ requireRole('admin');
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

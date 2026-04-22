@@ -78,6 +78,7 @@ requireRole('admin');
         .toast.success { background: #10b981; }
         .toast.error   { background: #ef4444; }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
 <div class="page-wrapper">
@@ -410,5 +411,6 @@ loadFeedback();
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

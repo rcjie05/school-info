@@ -37,6 +37,7 @@ requireRole('admin');
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
         .form-group input { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: var(--radius-md); }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -268,5 +269,6 @@ requireRole('admin');
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

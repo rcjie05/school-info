@@ -63,6 +63,7 @@ $conn->close();
         .no-profile { font-size:0.75rem; color:#ef4444; font-weight:600; }
         .has-profile { font-size:0.75rem; color:#10b981; font-weight:600; }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
 <div class="page-wrapper">
@@ -390,5 +391,6 @@ loadEmployees();
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

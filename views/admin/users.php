@@ -30,62 +30,245 @@ requireRole('admin');
     <link rel="stylesheet" href="../../css/mobile-fix.css">
     <link rel="stylesheet" href="../../css/themes.css">
     <style>
+        /* ============================================================
+           USER MANAGEMENT PAGE — CUSTOM STYLES
+           ============================================================ */
+
+        /* ── TOAST NOTIFICATION (bottom-right popup message) ──
+           - bottom/right: position on screen
+           - font-size: size of the message text
+        ── */
+        #toast {
+            position: fixed; bottom: 2rem; right: 2rem;
+            padding: 0.75rem 1.4rem; border-radius: 10px;
+            color: white; font-weight: 600; font-size: 0.88rem;
+            z-index: 9999;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+            display: none; align-items: center; gap: 0.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        /* ── TABS (Active Users / Archived) ──
+           - border-bottom: the underline separator
+           - margin-bottom: space below the tabs
+        ── */
+        .tab-bar {
+            display: flex;
+            border-bottom: 1.5px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+            gap: 0.25rem;
+        }
+        .tab-btn {
+            padding: 0.6rem 1.25rem;
+            border: none; background: none;
+            font-size: 0.88rem; font-weight: 700;
+            color: #6b7280; cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -1.5px;
+            border-radius: 6px 6px 0 0;
+            transition: color 0.2s, background 0.2s, border-color 0.2s;
+            letter-spacing: 0.02em;
+        }
+        .tab-btn:hover { background: #f3f4f6; color: #374151; }
+
+        /* Active tab color — change #8b0000 to any color */
+        .tab-btn.active { color: #8b0000; border-bottom-color: #8b0000; background: #fff5f5; }
+
+        /* ── TAB BADGE (the number next to tab label) ──
+           - font-size: size of the count number
+        ── */
+        .tab-count {
+            display: inline-block; background: #e5e7eb; color: #374151;
+            font-size: 0.7rem; font-weight: 800; border-radius: 999px;
+            padding: 0.1rem 0.5rem; margin-left: 0.3rem; vertical-align: middle;
+        }
+        .tab-btn.active .tab-count { background: #8b0000; color: white; }
+
+        /* ── FILTER BAR (Role, Status dropdowns + Search input) ──
+           - gap: space between the filter controls
+           - padding: space inside each control
+        ── */
+        .filter-bar {
+            display: flex; gap: 0.75rem; flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+            padding: 1rem 1.1rem;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            align-items: center;
+        }
+        .filter-bar select,
+        .filter-bar input[type="text"] {
+            padding: 0.5rem 0.85rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 7px;
+            font-size: 0.85rem;
+            color: #374151;
+            background: white;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            height: 38px;
+        }
+        .filter-bar select:focus,
+        .filter-bar input[type="text"]:focus {
+            border-color: #8b0000;
+            box-shadow: 0 0 0 3px rgba(139,0,0,0.08);
+        }
+        .filter-bar input[type="text"] { flex: 1; min-width: 180px; }
+
+        /* ── ARCHIVED BADGE (shown next to name in archived tab) ── */
+        .badge-archived {
+            display: inline-block; background: #f3f4f6; color: #9ca3af;
+            font-size: 0.68rem; font-weight: 700; border-radius: 999px;
+            padding: 0.1rem 0.55rem; border: 1px solid #e5e7eb; margin-left: 0.4rem;
+            vertical-align: middle; letter-spacing: 0.03em;
+        }
+        .archived-row td { opacity: 0.75; }
+
+        /* ── ARCHIVED WARNING BOX ── */
+        .archived-warning {
+            background: #fffbeb; border: 1px solid #fde68a;
+            padding: 0.7rem 1rem; border-radius: 8px;
+            margin-bottom: 1rem; font-size: 0.82rem; color: #92400e;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        /* ── MODAL OVERLAY (dark background behind popups) ──
+           - background: darkness of the backdrop (rgba alpha = darkness)
+        ── */
         .modal {
             display: none; position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 1000;
+            background: rgba(0,0,0,0.45);
+            z-index: 1000;
             align-items: center; justify-content: center;
+            backdrop-filter: blur(2px);
         }
         .modal.active { display: flex; }
+
+        /* ── MODAL BOX (the white popup card) ──
+           - max-width: how wide the modal can get (currently 580px)
+           - padding: space inside the modal
+           - border-radius: roundness of corners
+        ── */
         .modal-content {
-            background: white; padding: 2rem;
-            border-radius: var(--radius-lg);
-            max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;
+            background: white;
+            padding: 0;
+            border-radius: 14px;
+            max-width: 580px; width: 92%;
+            max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            animation: modalPop 0.2s ease;
         }
+        @keyframes modalPop { from { transform: translateY(-16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* ── MODAL HEADER (colored top bar of the modal) ── */
+        .modal-header {
+            background: #8b0000;
+            padding: 1.1rem 1.5rem;
+            border-radius: 14px 14px 0 0;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 3px solid #c8a951;
+        }
+        .modal-header h2 {
+            margin: 0; font-size: 1rem; color: white;
+            font-weight: 700; letter-spacing: 0.02em;
+        }
+        .modal-close-btn {
+            background: none; border: none; color: rgba(255,255,255,0.7);
+            font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0 4px;
+            transition: color 0.2s;
+        }
+        .modal-close-btn:hover { color: white; }
+
+        /* ── MODAL BODY (the form area inside the modal) ── */
+        .modal-body { padding: 1.4rem 1.5rem 1.5rem; }
+
+        /* ── FORM FIELDS inside modals ──
+           - padding: space inside each input (.75rem)
+           - border-radius: roundness of input corners
+           - font-size: text size inside inputs
+        ── */
         .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: var(--radius-md);
+        .form-group label {
+            display: block; margin-bottom: 0.4rem;
+            font-weight: 700; font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.06em; color: #374151;
         }
-        .tab-bar { display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 1.5rem; }
-        .tab-btn {
-            padding: 0.65rem 1.4rem; border: none; background: none;
-            font-size: 0.95rem; font-weight: 600; color: var(--text-secondary, #6b7280);
-            cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px;
-            transition: color 0.2s, border-color 0.2s;
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%; padding: 0.7rem 0.9rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px; font-size: 0.88rem;
+            color: #111827; background: white;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
         }
-        .tab-btn.active { color: var(--primary, #4f46e5); border-bottom-color: var(--primary, #4f46e5); }
-        .tab-count {
-            display: inline-block; background: #e5e7eb; color: #374151;
-            font-size: 0.72rem; font-weight: 700; border-radius: 999px;
-            padding: 0 0.5rem; margin-left: 0.35rem;
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #8b0000;
+            box-shadow: 0 0 0 3px rgba(139,0,0,0.08);
         }
-        .tab-btn.active .tab-count { background: var(--primary, #4f46e5); color: white; }
-        .badge-archived {
-            display: inline-block; background: #f3f4f6; color: #6b7280;
-            font-size: 0.7rem; font-weight: 700; border-radius: 999px;
-            padding: 0.1rem 0.55rem; border: 1px solid #d1d5db; margin-left: 0.3rem;
+        .form-group small { font-size: 0.75rem; color: #9ca3af; display: block; margin-top: 0.3rem; }
+
+        /* ── MODAL BUTTONS (Save / Cancel row) ── */
+        .modal-btn-row {
+            display: flex; gap: 0.75rem; margin-top: 1.5rem;
         }
-        .archived-row td { opacity: 0.8; }
-        #toast {
-            position: fixed; bottom: 2rem; right: 2rem;
-            padding: 0.85rem 1.5rem; border-radius: var(--radius-md);
-            color: white; font-weight: 600; font-size: 0.95rem;
-            z-index: 9999; display: none; box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+        .modal-btn-row .btn { flex: 1; justify-content: center; }
+
+        /* ── SUSPENSION WARNING BOX inside modal ── */
+        .suspension-warning {
+            background: #fffbeb; border: 1px solid #fde68a;
+            padding: 0.85rem 1rem; border-radius: 8px;
+            margin-bottom: 1rem;
         }
-    
-        /* ── Show/Hide Password ── */
+        .suspension-warning strong { color: #92400e; display: block; margin-bottom: 0.3rem; font-size: 0.85rem; }
+        .suspension-warning p { color: #92400e; margin: 0; font-size: 0.82rem; }
+
+        /* ── SHOW/HIDE PASSWORD TOGGLE ── */
         .pw-eye-wrap { position: relative; }
         .pw-eye-wrap input { padding-right: 2.6rem !important; }
         .pw-eye-btn {
-            position: absolute; right: .65rem; top: 50%; transform: translateY(-50%);
+            position: absolute; right: 0.65rem; top: 50%; transform: translateY(-50%);
             background: none; border: none; cursor: pointer; padding: 4px;
             color: #aaa; display: flex; align-items: center; line-height: 1;
-            transition: color .2s;
+            transition: color 0.2s;
         }
-        .pw-eye-btn:hover { color: var(--primary-purple, #8b0000); }
+        .pw-eye-btn:hover { color: #8b0000; }
 
-        </style>
+        /* ── ACTION BUTTONS in the table ──
+           - font-size: size of the button text
+           - padding: size of the button (top/bottom left/right)
+           - min-width: forces all buttons to be the same width
+        ── */
+        .btn-action {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;
+            font-size: 0.75rem; font-weight: 700;
+            padding: 0.4rem 0; border-radius: 6px;
+            border: none; cursor: pointer; white-space: nowrap;
+            transition: opacity 0.15s, transform 0.1s;
+            text-transform: uppercase; letter-spacing: 0.03em;
+            min-width: 105px; width: 105px;
+        }
+        .btn-action:hover { opacity: 0.85; transform: translateY(-1px); }
+        .btn-action:active { transform: translateY(0); }
+        /* ── ACTION BUTTON COLORS — change background/color/border to restyle ── */
+        .btn-edit         { background: #1d4ed8; color: #fff; border: 1px solid #1e40af; }
+        .btn-suspend      { background: #ea580c; color: #fff; border: 1px solid #c2410c; }
+        .btn-activate     { background: #16a34a; color: #fff; border: 1px solid #15803d; }
+        .btn-archive      { background: #6366f1; color: #fff; border: 1px solid #4f46e5; }
+        .btn-delete       { background: #dc2626; color: #fff; border: 1px solid #b91c1c; }
+        .btn-restore      { background: #16a34a; color: #fff; border: 1px solid #15803d; }
+        .btn-delete-forever { background: #7f1d1d; color: #fff; border: 1px solid #6b1414; }
+
+        /* ── TABLE ACTION CELL ── */
+        .action-cell { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; align-items: center; min-width: 220px; }
+    </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
 <div id="toast"></div>
@@ -155,8 +338,8 @@ requireRole('admin');
 
             <!-- Active Users Panel -->
             <div id="panelActive">
-                <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
-                    <select id="roleFilter" onchange="loadUsers()" style="padding:0.5rem; border-radius:var(--radius-md); border:1px solid #ddd;">
+                <div class="filter-bar">
+                    <select id="roleFilter" onchange="loadUsers()">
                         <option value="">All Roles</option>
                         <option value="student">Students</option>
                         <option value="teacher">Teachers</option>
@@ -164,7 +347,7 @@ requireRole('admin');
                         <option value="admin">Admins</option>
                         <option value="hr">HR Officers</option>
                     </select>
-                    <select id="statusFilter" onchange="loadUsers()" style="padding:0.5rem; border-radius:var(--radius-md); border:1px solid #ddd;">
+                    <select id="statusFilter" onchange="loadUsers()">
                         <option value="">All Status</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
@@ -172,16 +355,15 @@ requireRole('admin');
                         <option value="approved">Approved</option>
                         <option value="rejected">Rejected</option>
                     </select>
-                    <input type="text" id="searchInput" placeholder="Search users..." onkeyup="loadUsers()"
-                        style="padding:0.5rem; border-radius:var(--radius-md); border:1px solid #ddd; flex:1; min-width:200px;">
+                    <input type="text" id="searchInput" placeholder="🔍 Search users..." onkeyup="loadUsers()">
                 </div>
                 <div id="usersTable">Loading...</div>
             </div>
 
             <!-- Archived Users Panel -->
             <div id="panelArchived" style="display:none;">
-                <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
-                    <select id="archivedRoleFilter" onchange="loadArchivedUsers()" style="padding:0.5rem; border-radius:var(--radius-md); border:1px solid #ddd;">
+                <div class="filter-bar">
+                    <select id="archivedRoleFilter" onchange="loadArchivedUsers()">
                         <option value="">All Roles</option>
                         <option value="student">Students</option>
                         <option value="teacher">Teachers</option>
@@ -189,10 +371,9 @@ requireRole('admin');
                         <option value="admin">Admins</option>
                         <option value="hr">HR Officers</option>
                     </select>
-                    <input type="text" id="archivedSearchInput" placeholder="Search archived users..." onkeyup="loadArchivedUsers()"
-                        style="padding:0.5rem; border-radius:var(--radius-md); border:1px solid #ddd; flex:1; min-width:200px;">
+                    <input type="text" id="archivedSearchInput" placeholder="🔍 Search archived users..." onkeyup="loadArchivedUsers()">
                 </div>
-                <div style="background:#fef9c3; border:1px solid #fde047; padding:0.75rem 1rem; border-radius:var(--radius-md); margin-bottom:1rem; font-size:0.875rem; color:#713f12;">
+                <div class="archived-warning">
                     ⚠️ Archived users cannot log in. You can restore them to make them active again, or permanently delete them.
                 </div>
                 <div id="archivedTable">Loading...</div>
@@ -204,7 +385,11 @@ requireRole('admin');
 <!-- Add/Edit User Modal -->
 <div id="userModal" class="modal">
     <div class="modal-content">
-        <h2 id="modalTitle">Add New User</h2>
+        <div class="modal-header">
+            <h2 id="modalTitle">Add New User</h2>
+            <button type="button" class="modal-close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
         <form id="userForm" onsubmit="saveUser(event)">
             <input type="hidden" id="userId">
             <div class="form-group"><label>Name *</label><input type="text" id="userName" required></div>
@@ -247,19 +432,24 @@ requireRole('admin');
                 <div class="form-group"><label>Office Location</label><input type="text" id="officeLocation"></div>
                 <div class="form-group"><label>Office Hours</label><input type="text" id="officeHours"></div>
             </div>
-            <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                <button type="submit" class="btn btn-primary" style="flex:1;">Save</button>
-                <button type="button" class="btn" onclick="closeModal()" style="flex:1;">Cancel</button>
+            <div class="modal-btn-row">
+                <button type="submit" class="btn btn-primary">💾 Save</button>
+                <button type="button" class="btn" onclick="closeModal()">Cancel</button>
             </div>
         </form>
+        </div>
     </div>
 </div>
 
 <!-- Suspension Modal -->
 <div id="suspensionModal" class="modal">
     <div class="modal-content">
-        <h2>Suspend/Deactivate User</h2>
-        <p style="color:var(--text-secondary); margin-bottom:1.5rem;">Suspending a user will prevent them from logging in.</p>
+        <div class="modal-header">
+            <h2>Suspend / Deactivate User</h2>
+            <button type="button" class="modal-close-btn" onclick="closeSuspensionModal()">×</button>
+        </div>
+        <div class="modal-body">
+        <p style="color:#6b7280; margin-bottom:1.25rem; font-size:0.88rem;">Suspending a user will prevent them from logging in.</p>
         <form id="suspensionForm" onsubmit="confirmSuspension(event)">
             <input type="hidden" id="suspendUserId">
             <input type="hidden" id="suspendUserName">
@@ -279,15 +469,16 @@ requireRole('admin');
                 <label>Reason *</label>
                 <textarea id="suspensionReason" rows="4" required placeholder="Enter reason for suspension..."></textarea>
             </div>
-            <div style="background:#FFF3CD; border:1px solid #FFC107; padding:1rem; border-radius:var(--radius-md); margin-bottom:1rem;">
-                <strong style="color:#856404;">⚠️ Warning:</strong>
-                <p style="color:#856404; margin:0.5rem 0 0 0; font-size:0.875rem;">User will be unable to access any features until reactivated.</p>
+            <div class="suspension-warning">
+                <strong>⚠️ Warning</strong>
+                <p>User will be unable to access any features until reactivated.</p>
             </div>
-            <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                <button type="submit" class="btn btn-primary" style="flex:1; background:var(--status-rejected);">Suspend User</button>
-                <button type="button" class="btn" onclick="closeSuspensionModal()" style="flex:1;">Cancel</button>
+            <div class="modal-btn-row">
+                <button type="submit" class="btn btn-primary" style="background:#991b1b;">🚫 Suspend User</button>
+                <button type="button" class="btn" onclick="closeSuspensionModal()">Cancel</button>
             </div>
         </form>
+        </div>
     </div>
 </div>
 
@@ -298,7 +489,7 @@ function showToast(msg, type = 'success') {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.style.background = type === 'success' ? '#22c55e' : '#ef4444';
-    t.style.display = 'block';
+    t.style.display = 'flex';
     clearTimeout(t._timer);
     t._timer = setTimeout(() => t.style.display = 'none', 3500);
 }
@@ -344,10 +535,11 @@ async function loadUsers() {
     if (status) params.append('status', status);
     if (search) params.append('search', search);
 
+    document.getElementById('usersTable').innerHTML = sccSkeletonRows(5);
     try {
         const res  = await fetch(`../../api/admin/get_users.php?${params}`);
         const data = await res.json();
-        document.getElementById('countActive').textContent = data.success ? data.users.length : '!';
+        document.getElementById('countActive').textContent = data.success ? data.users.length : '0';
 
         if (!data.success) {
             document.getElementById('usersTable').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:2rem;">Failed to load users.</p>';
@@ -364,42 +556,45 @@ async function loadUsers() {
         </tr></thead><tbody>`;
 
         data.users.forEach(user => {
-            const isActive   = user.status === 'active';
             const isInactive = user.status === 'inactive';
+            // Only active or approved users can be suspended (not pending/rejected)
+            const isSuspendable = user.status === 'active' || user.status === 'approved';
 
             let suspInfo = '—';
             if (isInactive && user.deactivated_until) {
                 const until = new Date(user.deactivated_until);
                 suspInfo = until > new Date()
                     ? `<span style="color:var(--status-rejected);font-size:0.75rem;">Until: ${until.toLocaleDateString()} ${until.toLocaleTimeString()}</span>`
-                    : `<span style="color:var(--text-secondary);font-size:0.75rem;">Expired</span>`;
+                    : `<span style="color:#9ca3af;font-size:0.75rem;" title="Suspension period has passed — click Activate to restore access">⏰ Expired (needs manual activation)</span>`;
             } else if (isInactive) {
                 suspInfo = `<span style="color:var(--status-rejected);font-size:0.75rem;">Permanent</span>`;
             }
 
-            const suspBtn = isActive
-                ? `<button class="btn btn-sm" onclick="openSuspensionModal(${user.id},'${user.name.replace(/'/g,"\\'")}')\" style="background:var(--status-pending);">Suspend</button>`
-                : `<button class="btn btn-sm" onclick="activateUser(${user.id},'${user.name.replace(/'/g,"\\'")}')\" style="background:var(--status-approved);">Activate</button>`;
+            const suspBtn = isSuspendable
+                ? `<button class="btn-action btn-suspend" onclick="openSuspensionModal(${user.id},'${user.name.replace(/'/g,"\\'")}','${user.role}')">⏸ Suspend</button>`
+                : `<button class="btn-action btn-activate" onclick="activateUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">✅ Activate</button>`;
 
             html += `<tr>
                 <td>${user.name}</td>
                 <td>${user.email}</td>
-                <td><span class="status-badge">${user.role}</span></td>
+                <td>${sccRoleBadge(user.role)}</td>
                 <td><span class="status-badge status-${user.status}">${user.status}</span></td>
                 <td>${suspInfo}</td>
                 <td>${user.created_date}</td>
-                <td style="display:flex;gap:0.3rem;flex-wrap:wrap;">
-                    <button class="btn btn-sm" onclick='editUser(${JSON.stringify(user)})'>Edit</button>
+                <td class="action-cell">
+                    <button class="btn-action btn-edit" onclick='editUser(${JSON.stringify(user)})'>✏️ Edit</button>
                     ${suspBtn}
-                    <button class="btn btn-sm" onclick="archiveUser(${user.id},'${user.name.replace(/'/g,"\\'")}')\" style="background:#6b7280;color:#fff;">🗃️ Archive</button>
-                    <button class="btn btn-sm" onclick="deleteUser(${user.id},'${user.name.replace(/'/g,"\\'")}')\" style="background:var(--status-rejected);">Delete</button>
+                    <button class="btn-action btn-archive" onclick="archiveUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">🗃️ Archive</button>
+                    <button class="btn-action btn-delete" onclick="deleteUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">🗑️ Delete</button>
                 </td>
             </tr>`;
         });
         html += '</tbody></table>';
         document.getElementById('usersTable').innerHTML = html;
+        sccMakeSortable('#usersTable table');
     } catch(e) {
-        document.getElementById('usersTable').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:2rem;">Error loading users. Please refresh.</p>';
+        document.getElementById('countActive').textContent = '!';
+        document.getElementById('usersTable').innerHTML = '<p style="text-align:center;color:#ef4444;padding:2rem;">⚠️ Error loading users. Please refresh the page or check your session.</p>';
     }
 }
 
@@ -411,10 +606,11 @@ async function loadArchivedUsers() {
     if (role)   params.append('role', role);
     if (search) params.append('search', search);
 
+    document.getElementById('archivedTable').innerHTML = sccSkeletonRows(3);
     try {
         const res  = await fetch(`../../api/admin/get_archived_users.php?${params}`);
         const data = await res.json();
-        document.getElementById('countArchived').textContent = data.success ? data.users.length : '!';
+        document.getElementById('countArchived').textContent = data.success ? data.users.length : '0';
 
         if (!data.success) {
             document.getElementById('archivedTable').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:2rem;">Failed to load archived users.</p>';
@@ -439,26 +635,28 @@ async function loadArchivedUsers() {
             html += `<tr class="archived-row">
                 <td>${user.name} <span class="badge-archived">archived</span></td>
                 <td>${user.email}</td>
-                <td><span class="status-badge">${user.role}</span></td>
+                <td>${sccRoleBadge(user.role)}</td>
                 <td>${info}</td>
                 <td>${user.created_date}</td>
                 <td style="font-size:0.8rem;color:var(--text-secondary);">${user.archived_date}</td>
-                <td style="display:flex;gap:0.3rem;flex-wrap:wrap;">
-                    <button class="btn btn-sm" onclick="restoreUser(${user.id},'${user.name.replace(/'/g,"\\'")}')\" style="background:var(--status-approved);">♻️ Restore</button>
-                    <button class="btn btn-sm" onclick="permanentlyDelete(${user.id},'${user.name.replace(/'/g,"\\'")}')\" style="background:var(--status-rejected);">🗑️ Delete Forever</button>
+                <td class="action-cell">
+                    <button class="btn-action btn-restore" onclick="restoreUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">♻️ Restore</button>
+                    <button class="btn-action btn-delete-forever" onclick="permanentlyDelete(${user.id},'${user.name.replace(/'/g,"\\'")}')">🗑️ Delete Forever</button>
                 </td>
             </tr>`;
         });
         html += '</tbody></table>';
         document.getElementById('archivedTable').innerHTML = html;
     } catch(e) {
-        document.getElementById('archivedTable').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:2rem;">Error loading archived users.</p>';
+        document.getElementById('countArchived').textContent = '!';
+        document.getElementById('archivedTable').innerHTML = '<p style="text-align:center;color:#ef4444;padding:2rem;">⚠️ Error loading archived users. Please refresh the page or check your session.</p>';
     }
 }
 
 /* ── Archive / Restore / Delete Actions ── */
 async function archiveUser(userId, userName) {
-    if (!confirm(`Archive "${userName}"?\n\nThey won't be able to log in, but their data is kept. You can restore them anytime.`)) return;
+    const ok = await sccConfirm({ title: 'Archive User', message: `Archive <strong>${userName}</strong>? They won't be able to log in, but their data is kept. You can restore them anytime.`, type: 'warning', confirmText: '🗃️ Archive' });
+    if (!ok) return;
     try {
         const res    = await fetch('../../api/admin/archive_user.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({user_id: userId}) });
         const result = await res.json();
@@ -468,7 +666,8 @@ async function archiveUser(userId, userName) {
 }
 
 async function restoreUser(userId, userName) {
-    if (!confirm(`Restore "${userName}" to active status?`)) return;
+    const ok = await sccConfirm({ title: 'Restore User', message: `Restore <strong>${userName}</strong> to active status?`, type: 'info', confirmText: '♻️ Restore' });
+    if (!ok) return;
     try {
         const res    = await fetch('../../api/admin/restore_user.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({user_id: userId}) });
         const result = await res.json();
@@ -478,7 +677,8 @@ async function restoreUser(userId, userName) {
 }
 
 async function permanentlyDelete(userId, userName) {
-    if (!confirm(`⚠️ PERMANENTLY DELETE "${userName}"?\n\nThis CANNOT be undone. All their data will be gone forever.`)) return;
+    const ok = await sccConfirm({ title: '⚠️ Permanently Delete', message: `This will <strong>permanently delete ${userName}</strong> and all their data. This action <strong>cannot be undone</strong>.`, type: 'danger', confirmText: '🗑️ Delete Forever' });
+    if (!ok) return;
     try {
         const res    = await fetch('../../api/admin/delete_user.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({user_id: userId}) });
         const result = await res.json();
@@ -488,7 +688,8 @@ async function permanentlyDelete(userId, userName) {
 }
 
 async function activateUser(userId, userName) {
-    if (!confirm(`Activate ${userName}?`)) return;
+    const ok = await sccConfirm({ title: 'Activate User', message: `Activate <strong>${userName}</strong> and restore their access?`, type: 'info', confirmText: '✅ Activate' });
+    if (!ok) return;
     try {
         const res    = await fetch('../../api/admin/toggle_user_status.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({user_id: userId, status: 'active'}) });
         const result = await res.json();
@@ -498,7 +699,11 @@ async function activateUser(userId, userName) {
 }
 
 async function deleteUser(userId, userName) {
-    if (!confirm(`Delete ${userName} permanently? This cannot be undone.\n\nTip: Consider using Archive instead.`)) return;
+    const ok = await sccConfirm({ title: 'Delete Active User', message: `⚠️ <strong>${userName}</strong> is an active user. Are you sure you want to permanently delete them? Consider using <strong>Archive</strong> instead to preserve their data.<br><br>This action <strong>cannot be undone</strong>.`, type: 'danger', confirmText: '🗑️ Delete Permanently' });
+    if (!ok) return;
+    // Second confirmation for active users
+    const ok2 = await sccConfirm({ title: 'Final Confirmation', message: `This will permanently delete <strong>${userName}</strong> and all associated data. Continue?`, type: 'danger', confirmText: '✅ Yes, Delete Forever' });
+    if (!ok2) return;
     try {
         const res    = await fetch('../../api/admin/delete_user.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({user_id: userId}) });
         const result = await res.json();
@@ -515,7 +720,7 @@ function openAddUserModal() {
     document.getElementById('userPassword').required = true;
     document.getElementById('userModal').classList.add('active');
 }
-function editUser(user) {
+async function editUser(user) {
     document.getElementById('modalTitle').textContent = 'Edit User';
     document.getElementById('userId').value           = user.id;
     document.getElementById('userName').value         = user.name;
@@ -527,10 +732,13 @@ function editUser(user) {
     document.getElementById('studentId').value        = user.student_id || '';
     document.getElementById('course').value           = user.course || '';
     document.getElementById('yearLevel').value        = user.year_level || '';
-    document.getElementById('department').value       = user.department || '';
     document.getElementById('officeLocation').value   = user.office_location || '';
     document.getElementById('officeHours').value      = user.office_hours || '';
+    // Ensure departments are loaded before populating the dropdown
+    if (departments.length === 0) await loadDepartments();
     toggleRoleFields();
+    // Set department after toggleRoleFields populates the select
+    document.getElementById('department').value = user.department || '';
     document.getElementById('userModal').classList.add('active');
 }
 function closeModal() { document.getElementById('userModal').classList.remove('active'); }
@@ -564,12 +772,14 @@ async function saveUser(e) {
 }
 
 /* ── Suspension ── */
-function openSuspensionModal(userId, userName) {
-    document.getElementById('suspendUserId').value   = userId;
-    document.getElementById('suspendUserName').value = userName;
+function openSuspensionModal(userId, userName, userRole) {
+    // Reset form first, then set values so reset() doesn't wipe them
     document.getElementById('suspensionForm').reset();
     document.getElementById('suspendUserId').value   = userId;
     document.getElementById('suspendUserName').value = userName;
+    // Show who is being suspended in the modal header
+    const roleLabel = userRole ? ` <span style="font-size:0.78rem;opacity:0.75;font-weight:400;">(${userRole})</span>` : '';
+    document.querySelector('#suspensionModal .modal-header h2').innerHTML = 'Suspend: ' + userName + roleLabel;
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     document.getElementById('suspensionEndDate').min = now.toISOString().slice(0,16);
@@ -602,8 +812,12 @@ async function confirmSuspension(e) {
 }
 
 /* ── Init ── */
-loadDepartments();
-loadUsers();
+// Defer init until ALL scripts (including enhancements.js) are loaded
+document.addEventListener('DOMContentLoaded', function () {
+    loadDepartments();
+    loadUsers();
+    loadArchivedUsers();
+});
 </script>
 
 <script>
@@ -697,5 +911,6 @@ function togglePass(fieldId, btn) {
     btn.style.color = isHidden ? 'var(--primary-purple, #8b0000)' : '';
 }
 </script>
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

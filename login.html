@@ -67,17 +67,67 @@
         .slide-dots { position:absolute; bottom:1rem; left:3rem; display:flex; gap:.4rem; z-index:10; }
         .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.3); border:1.5px solid rgba(255,255,255,0.5); cursor:pointer; transition:background .4s; }
         .dot.active { background:var(--gold); border-color:var(--gold); }
+
+        /* ============================================================
+           WELCOME CARD — OUTER WRAPPER
+           - padding: space between card and screen edges
+           ============================================================ */
         .hero-content { position:relative; z-index:10; padding:2rem 2.5rem; color:white; }
+
+        /* ============================================================
+           WELCOME CARD — THE DARK FROSTED BOX
+           - max-width: how wide the card is
+           - height: how tall the card is (currently 300px)
+           - padding: space inside the card (top/side/bottom)
+           - border-radius: roundness of corners
+           - background: darkness/transparency of the card
+           ============================================================ */
         .hero-content-inner { background:rgba(14,3,3,0.78); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:.8rem 1.8rem .9rem; box-shadow:0 8px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07); max-width:380px; height:300px; display:flex; flex-direction:column; justify-content:space-between; }
+
+        /* ============================================================
+           WELCOME CARD — "STUDENT PORTAL" BADGE (top label)
+           - font-size: size of the badge text
+           - color: text color of the badge
+           - border: outline color of the badge
+           ============================================================ */
         .hero-tag { display:inline-block; background:rgba(240,192,112,0.15); color:#f0c070; border:1.5px solid rgba(240,192,112,0.45); font-size:.68rem; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; padding:.28rem .8rem; border-radius:4px; margin-bottom:1rem; }
+
+        /* ============================================================
+           WELCOME CARD — "Welcome Back," HEADING
+           - font-size: size of the heading (use clamp(min, preferred, max))
+           - color: text color (currently white #ffffff)
+           ============================================================ */
         .hero-content h1 { font-family:'Playfair Display',serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:800; line-height:1.15; text-shadow:0 2px 14px rgba(0,0,0,0.95), 0 0 30px rgba(0,0,0,0.6); margin-bottom:.4rem; color:#ffffff; }
+
+        /* ============================================================
+           WELCOME CARD — "Cecilian!" ITALIC TEXT
+           - color: text color (currently gold #f0c070)
+           ============================================================ */
         .hero-content h1 em { color:#f0c070; font-style:italic; text-shadow:0 2px 12px rgba(0,0,0,0.95), 0 0 20px rgba(139,26,26,0.5); }
+
+        /* ============================================================
+           WELCOME CARD — GOLD DIVIDER LINE
+           - width: how long the line is
+           - height: thickness of the line
+           ============================================================ */
         .gold-bar { width:48px; height:2px; background:linear-gradient(to right, rgba(240,192,112,0.8), rgba(240,192,112,0.1)); border-radius:2px; margin-bottom:1rem; }
-        .hero-content p { font-size:1.2rem; color:#e8d8c4; line-height:1.7; max-width:350px; margin-bottom:1.4rem; text-shadow:0 1px 5px rgba(0,0,0,0.85); }
+
+        /* ============================================================
+           WELCOME CARD — DESCRIPTION PARAGRAPH TEXT
+           - font-size: size of the description text
+           - color: text color (currently warm off-white)
+           ============================================================ */
+        .hero-content p { font-size:.88rem; color:#e8d8c4; line-height:1.7; max-width:340px; margin-bottom:1.4rem; text-shadow:0 1px 5px rgba(0,0,0,0.85); }
+
+        /* ============================================================
+           WELCOME CARD — BUTTONS (Online Enrollment / Back to Home)
+           ============================================================ */
         .hero-links { display:flex; gap:.75rem; flex-wrap:wrap; }
         .hero-links a { display:inline-block; font-size:.78rem; font-weight:700; padding:.5rem 1.1rem; border-radius:4px; text-decoration:none; text-transform:uppercase; letter-spacing:.4px; transition:all .2s; }
+        /* Gold/amber button */
         .hl-gold { background:#b8922e; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.4); }
         .hl-gold:hover { background:#cda840; }
+        /* Ghost/outline button */
         .hl-ghost { border:1.5px solid rgba(255,255,255,0.3); color:#e8d8c4; background:rgba(255,255,255,0.07); }
         .hl-ghost:hover { background:rgba(255,255,255,0.14); }
         .login-side { width:430px; flex-shrink:0; background:var(--cream); display:flex; flex-direction:column; overflow-y:auto; }

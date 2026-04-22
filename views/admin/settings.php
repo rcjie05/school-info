@@ -184,6 +184,7 @@ requireRole('admin');
             background: #f59e0b; margin-left: 0.4rem; vertical-align: middle;
         }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
 <div class="page-wrapper">
@@ -740,5 +741,6 @@ loadSettings();
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

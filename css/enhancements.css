@@ -1,0 +1,228 @@
+/* =================================================================
+   SYSTEM ENHANCEMENTS — applies to all admin pages
+   ================================================================= */
+
+/* ── 1. PAGE LOADING BAR (top of page on navigation) ──────────────
+   - height: thickness of the bar
+   - background: color of the bar (matches school red)
+   ────────────────────────────────────────────────────────────────── */
+#page-progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(to right, #8b0000, #c8a951);
+    z-index: 99999;
+    transition: width 0.3s ease, opacity 0.4s ease;
+    border-radius: 0 2px 2px 0;
+}
+
+/* ── 2. STYLED CONFIRM DIALOG (replaces ugly browser confirm()) ────
+   - max-width: width of the dialog box
+   - border-radius: roundness of corners
+   ────────────────────────────────────────────────────────────────── */
+.scc-confirm-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 99998;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(3px);
+    animation: scc-fade-in 0.15s ease;
+}
+.scc-confirm-box {
+    background: white;
+    border-radius: 14px;
+    width: 92%; max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    overflow: hidden;
+    animation: scc-slide-up 0.2s ease;
+}
+.scc-confirm-header {
+    padding: 1.1rem 1.4rem 0.9rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+.scc-confirm-icon {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+}
+.scc-confirm-icon.danger  { background: #fef2f2; }
+.scc-confirm-icon.warning { background: #fffbeb; }
+.scc-confirm-icon.info    { background: #eff6ff; }
+.scc-confirm-title {
+    font-size: 0.95rem; font-weight: 700; color: #111827;
+}
+.scc-confirm-body {
+    padding: 1rem 1.4rem 1.25rem;
+    font-size: 0.86rem; color: #6b7280; line-height: 1.6;
+}
+.scc-confirm-footer {
+    padding: 0 1.4rem 1.2rem;
+    display: flex; gap: 0.6rem; justify-content: flex-end;
+}
+.scc-btn {
+    padding: 0.55rem 1.2rem; border-radius: 7px;
+    font-size: 0.84rem; font-weight: 700;
+    border: none; cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    letter-spacing: 0.02em;
+}
+.scc-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.scc-btn-cancel  { background: #f3f4f6; color: #374151; }
+.scc-btn-danger  { background: #dc2626; color: white; }
+.scc-btn-warning { background: #ea580c; color: white; }
+.scc-btn-info    { background: #2563eb; color: white; }
+
+/* ── 3. TOAST NOTIFICATIONS (better version with icons) ────────────
+   - bottom/right: position on screen
+   - min-width: minimum width of the toast
+   ────────────────────────────────────────────────────────────────── */
+#scc-toast-container {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    z-index: 99997;
+    display: flex; flex-direction: column; gap: 0.6rem;
+    pointer-events: none;
+}
+.scc-toast {
+    display: flex; align-items: center; gap: 0.65rem;
+    padding: 0.75rem 1.1rem;
+    border-radius: 10px;
+    min-width: 260px; max-width: 360px;
+    font-size: 0.86rem; font-weight: 600;
+    color: white;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    pointer-events: auto;
+    animation: scc-toast-in 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.scc-toast.hiding {
+    animation: scc-toast-out 0.25s ease forwards;
+}
+.scc-toast-icon { font-size: 1rem; flex-shrink: 0; }
+.scc-toast-msg  { flex: 1; line-height: 1.4; }
+.scc-toast-close {
+    background: none; border: none; color: rgba(255,255,255,0.7);
+    cursor: pointer; font-size: 1rem; padding: 0 0 0 0.4rem;
+    line-height: 1; transition: color 0.15s;
+}
+.scc-toast-close:hover { color: white; }
+.scc-toast.success { background: #16a34a; }
+.scc-toast.error   { background: #dc2626; }
+.scc-toast.warning { background: #ea580c; }
+.scc-toast.info    { background: #2563eb; }
+
+/* ── 4. LOADING SKELETONS (animated placeholders) ──────────────────
+   ────────────────────────────────────────────────────────────────── */
+.scc-skeleton-wrap {
+    padding: 0.5rem 0;
+}
+.scc-skeleton-row {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.85rem 1.5rem;
+    border-top: 1px solid #f1f5f9;
+}
+.scc-skeleton {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: scc-shimmer 1.4s infinite;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+.scc-skeleton-name   { width: 140px; height: 14px; }
+.scc-skeleton-email  { width: 200px; height: 14px; flex: 1; }
+.scc-skeleton-badge  { width: 64px;  height: 22px; border-radius: 999px; }
+.scc-skeleton-date   { width: 90px;  height: 14px; }
+.scc-skeleton-btn    { width: 60px;  height: 28px; border-radius: 6px; }
+
+/* ── 5. SORTABLE TABLE HEADERS ─────────────────────────────────────
+   ────────────────────────────────────────────────────────────────── */
+.data-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+.data-table th.sortable:hover { background: #e2e8f0; }
+.sort-icon {
+    display: inline-block; margin-left: 0.35rem;
+    font-size: 0.7rem; opacity: 0.4;
+    vertical-align: middle;
+    transition: opacity 0.15s, transform 0.2s;
+}
+.data-table th.sort-asc  .sort-icon,
+.data-table th.sort-desc .sort-icon { opacity: 1; color: #8b0000; }
+.data-table th.sort-desc .sort-icon { transform: rotate(180deg); }
+
+/* ── 6. IMPROVED STATUS BADGES ─────────────────────────────────────
+   ────────────────────────────────────────────────────────────────── */
+.status-badge {
+    padding: 0.28rem 0.75rem !important;
+    border-radius: 999px !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.status-active   { background: #dcfce7 !important; color: #166534 !important; border: 1px solid #bbf7d0; }
+.status-approved { background: #dcfce7 !important; color: #166534 !important; border: 1px solid #bbf7d0; }
+.status-pending  { background: #fef9c3 !important; color: #854d0e !important; border: 1px solid #fde68a; }
+.status-inactive { background: #f1f5f9 !important; color: #475569 !important; border: 1px solid #cbd5e1; }
+.status-rejected { background: #fee2e2 !important; color: #991b1b !important; border: 1px solid #fecaca; }
+
+/* Role badges */
+.role-badge {
+    padding: 0.28rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: inline-block;
+}
+.role-student   { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.role-teacher   { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+.role-admin     { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+.role-registrar { background: #faf5ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+.role-hr        { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+
+/* ── 7. TABLE ROW HOVER ─────────────────────────────────────────────
+   ────────────────────────────────────────────────────────────────── */
+.data-table tbody tr {
+    transition: background 0.15s, box-shadow 0.15s;
+}
+.data-table tbody tr:hover {
+    background: #fdf8f8 !important;
+    box-shadow: inset 3px 0 0 #8b0000;
+}
+
+/* ── 8. IMPROVED STAT CARDS on dashboard ───────────────────────────
+   ────────────────────────────────────────────────────────────────── */
+.stat-card {
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+}
+.stat-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+}
+.stat-value {
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    transition: all 0.4s ease;
+}
+.stat-label {
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.75;
+    margin-bottom: 0.5rem;
+}
+
+/* ── KEYFRAME ANIMATIONS ────────────────────────────────────────────*/
+@keyframes scc-fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scc-slide-up { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes scc-shimmer  { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes scc-toast-in  { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes scc-toast-out { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }

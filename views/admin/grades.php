@@ -29,6 +29,7 @@ requireRole('admin');
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/mobile-fix.css">
     <link rel="stylesheet" href="../../css/themes.css">
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -222,5 +223,6 @@ requireRole('admin');
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

@@ -47,6 +47,7 @@ $_avatar_conn->close();
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/mobile-fix.css">
     <link rel="stylesheet" href="../../css/themes.css">
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -393,7 +394,7 @@ $_initials   = strtoupper(substr($_avatar_user['name'] ?? '?', 0, 1));
                 const data = await response.json();
                 
                 if (data.success) {
-                    document.getElementById('totalUsers').textContent = data.stats.total_users;
+                    sccAnimateCount(document.getElementById('totalUsers'), data.stats.total_users);
                     if (data.user) {
                         document.getElementById('userName').textContent = data.user.name;
                         const avatarEl = document.getElementById('userAvatar');
@@ -403,9 +404,9 @@ $_initials   = strtoupper(substr($_avatar_user['name'] ?? '?', 0, 1));
                             avatarEl.textContent = (data.user.name || 'A').charAt(0).toUpperCase();
                         }
                     }
-                    document.getElementById('totalStudents').textContent = data.stats.total_students;
-                    document.getElementById('totalTeachers').textContent = data.stats.total_teachers;
-                    document.getElementById('totalBuildings').textContent = data.stats.total_buildings;
+                    sccAnimateCount(document.getElementById('totalStudents'), data.stats.total_students);
+                    sccAnimateCount(document.getElementById('totalTeachers'), data.stats.total_teachers);
+                    sccAnimateCount(document.getElementById('totalBuildings'), data.stats.total_buildings);
                     
                     loadRecentActivity(data.recent_activity);
                 }
@@ -839,5 +840,6 @@ $_initials   = strtoupper(substr($_avatar_user['name'] ?? '?', 0, 1));
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@ require_once '../../php/config.php';
 
 ob_clean();
 
-requireRole('admin');
+requireRoleApi('admin');
 
 $conn     = getDBConnection();
 $admin_id = $_SESSION['user_id'];

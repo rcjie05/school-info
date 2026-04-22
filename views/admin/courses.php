@@ -133,6 +133,7 @@ requireRole('admin');
 
         @media(max-width:640px) { .form-grid { grid-template-columns:1fr; } .detail-grid { grid-template-columns:1fr; } }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
 <div class="page-wrapper">
@@ -614,5 +615,6 @@ loadCourses();
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

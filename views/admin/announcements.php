@@ -54,6 +54,7 @@ requireRole('admin');
         .announcement-attachment .file-link { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--background-main); border: 1px solid #ddd; border-radius: var(--radius-md); text-decoration: none; color: var(--text-primary); font-size: 0.875rem; }
         .announcement-attachment .file-link:hover { background: #e5e7eb; }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -467,5 +468,6 @@ requireRole('admin');
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

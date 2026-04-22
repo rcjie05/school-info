@@ -83,6 +83,7 @@ requireRole('admin');
         .img-upload-row .img-side { flex:1; }
         .img-upload-row .img-actions { display:flex; flex-direction:column; gap:.4rem; }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
 <div class="page-wrapper">
@@ -742,5 +743,6 @@ loadBuildings();
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>
