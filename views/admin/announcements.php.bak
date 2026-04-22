@@ -8,7 +8,7 @@ $school_name = 'My School';
 $current_school_year = '----';
 if ($_sn_res) { while ($_sn_row = $_sn_res->fetch_assoc()) { if ($_sn_row['setting_key']==='school_name') $school_name=$_sn_row['setting_value']; if ($_sn_row['setting_key']==='current_school_year') $current_school_year=$_sn_row['setting_value']; } }
 // ──────────────────────────────────────────────────────────────────────
-requireRole('registrar');
+requireRole('admin');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +18,14 @@ requireRole('registrar');
     <link rel="shortcut icon" type="image/jpeg" href="../../images/logo2.jpg">
     <link rel="apple-touch-icon" href="../../images/logo2.jpg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Announcements - Registrar Dashboard</title>
+    <link rel="manifest" href="../../manifest.json">
+    <meta name="theme-color" content="#1E3352">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="<?= htmlspecialchars($school_name) ?> Portal">
+    <link rel="apple-touch-icon" href="../../images/logo2.jpg">
+    <title>Announcements - Admin Dashboard</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/mobile-fix.css">
     <link rel="stylesheet" href="../../css/themes.css">
@@ -41,11 +48,16 @@ requireRole('registrar');
         .file-preview-item .remove-file { position: absolute; top: 3px; right: 3px; background: rgba(220,38,38,0.85); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
         .existing-attachment { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #f3f4f6; border-radius: var(--radius-md); margin-top: 0.5rem; }
         .existing-attachment img, .existing-attachment video { max-width: 80px; max-height: 60px; border-radius: 4px; object-fit: cover; }
+        .announcement-attachment { margin-top: 0.75rem; }
+        .announcement-attachment img { max-width: 100%; max-height: 300px; border-radius: var(--radius-md); object-fit: contain; background: #f3f4f6; }
+        .announcement-attachment video { max-width: 100%; max-height: 300px; border-radius: var(--radius-md); }
+        .announcement-attachment .file-link { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--background-main); border: 1px solid #ddd; border-radius: var(--radius-md); text-decoration: none; color: var(--text-primary); font-size: 0.875rem; }
+        .announcement-attachment .file-link:hover { background: #e5e7eb; }
     </style>
+    <link rel="stylesheet" href="../../css/enhancements.css">
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Sidebar -->
                 <div class="sidebar-overlay" id="sidebarOverlay"></div>
         <aside class="sidebar">
             <div class="sidebar-logo">
@@ -54,44 +66,45 @@ requireRole('registrar');
                 </div>
                 <div class="logo-text">
                     <span id="sidebarSchoolName"><?= htmlspecialchars($school_name) ?></span>
-                    <span>Registrar Portal</span>
+                    <span>Admin Portal</span>
                 </div>
             </div>
             <nav class="sidebar-nav">
                 <div class="nav-section">
                     <div class="nav-section-title">Main</div>
                     <a href="dashboard.php" class="nav-item"><span class="nav-icon">📊</span><span>Dashboard</span></a>
-                    <a href="applications.php" class="nav-item"><span class="nav-icon">📋</span><span>Applications</span></a>
-                    <a href="manage_loads.php" class="nav-item"><span class="nav-icon">📚</span><span>Study Loads</span></a>
-                    <a href="grades.php" class="nav-item"><span class="nav-icon">🎓</span><span>Grades</span></a>
-                    <a href="add_drop_requests.php" class="nav-item"><span class="nav-icon">🔄</span><span>Add/Drop Requests</span></a>
+                    <a href="users.php" class="nav-item"><span class="nav-icon">👥</span><span>User Management</span></a>
                     <a href="floorplan.php" class="nav-item"><span class="nav-icon">🗺️</span><span>Floor Plan</span></a>
-                    <a href="reports.php" class="nav-item"><span class="nav-icon">📈</span><span>Reports</span></a>
+                    <a href="buildings.php" class="nav-item"><span class="nav-icon">🏢</span><span>Buildings & Rooms</span></a>
+                    <a href="departments.php" class="nav-item"><span class="nav-icon">🏛️</span><span>Departments</span></a>
+                    <a href="courses.php" class="nav-item"><span class="nav-icon">🎓</span><span>Courses</span></a>
+                    <a href="faculty.php" class="nav-item"><span class="nav-icon">👨‍🏫</span><span>Faculty Directory</span></a>
+                    <a href="grades.php" class="nav-item"><span class="nav-icon">📝</span><span>Grades</span></a>
+                    <a href="subjects.php" class="nav-item"><span class="nav-icon">📚</span><span>Subjects</span></a>
+                    <a href="sections.php" class="nav-item"><span class="nav-icon">📁</span><span>Sections</span></a>
                 </div>
                 <div class="nav-section">
                     <div class="nav-section-title">System</div>
                     <a href="announcements.php" class="nav-item active"><span class="nav-icon">📢</span><span>Announcements</span></a>
+                    <a href="audit_logs.php" class="nav-item"><span class="nav-icon">📋</span><span>Audit Logs</span></a>
+                    <a href="recycle_bin.php" class="nav-item"><span class="nav-icon">🗑️</span><span>Recycle Bin</span></a>
                     <a href="feedback.php" class="nav-item"><span class="nav-icon">💬</span><span>Feedback</span></a>
-                </div>
-                <div class="nav-section">
-                    <div class="nav-section-title">HR</div>
-                    <a href="leave_requests.php" class="nav-item"><span class="nav-icon">🏖️</span><span>Leave Requests</span></a>
+                    <a href="account_settings.php" class="nav-item"><span class="nav-icon">👤</span><span>Profile Settings</span></a>
+                    <a href="settings.php" class="nav-item"><span class="nav-icon">⚙️</span><span>System Settings</span></a>
                 </div>
                 <div class="nav-section">
                     <div class="nav-section-title">Account</div>
-                    <a href="profile.php" class="nav-item"><span class="nav-icon">👤</span><span>My Profile</span></a>
                     <a href="../../php/logout.php" class="nav-item"><span class="nav-icon">🚪</span><span>Logout</span></a>
                 </div>
             </nav>
         </aside>
         
-        <!-- Main Content -->
         <main class="main-content">
             <header class="page-header">
                 <div class="header-title">
                     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
                     <h1>Announcements</h1>
-                    <p class="page-subtitle">Post and manage announcements</p>
+                    <p class="page-subtitle">Post and manage system announcements</p>
                 </div>
                 <div class="header-actions">
                     <button class="btn btn-primary" onclick="openAddModal()">📢 Post Announcement</button>
@@ -106,6 +119,7 @@ requireRole('registrar');
                         <option value="students">Students Only</option>
                         <option value="teachers">Teachers Only</option>
                         <option value="registrar">Registrars Only</option>
+                        <option value="admin">Admins Only</option>
                     </select>
                 </div>
                 <div id="announcementsTable">Loading...</div>
@@ -113,8 +127,12 @@ requireRole('registrar');
         </main>
     </div>
 
-    <div id="announcementModal" class="modal">
-        <div class="modal-content">
+    <!-- Lightbox Modal for image preview -->
+    <div id="imageLightbox" onclick="closeLightbox()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; align-items:center; justify-content:center; cursor:zoom-out;">
+        <img id="lightboxImg" src="" alt="" style="max-width:90%; max-height:90vh; border-radius:8px; object-fit:contain; box-shadow:0 4px 32px rgba(0,0,0,0.5);">
+    </div>
+
+    <div id="announcementModal" class="modal">        <div class="modal-content">
             <h2 id="modalTitle">Post Announcement</h2>
             <form id="announcementForm" onsubmit="saveAnnouncement(event)">
                 <input type="hidden" id="announcementId">
@@ -133,6 +151,7 @@ requireRole('registrar');
                         <option value="students">Students Only</option>
                         <option value="teachers">Teachers Only</option>
                         <option value="registrar">Registrars Only</option>
+                        <option value="admin">Admins Only</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -162,12 +181,9 @@ requireRole('registrar');
         </div>
     </div>
 
-    <!-- Lightbox Modal for image preview -->
-    <div id="imageLightbox" onclick="closeLightbox()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; cursor:zoom-out;">
-        <img id="lightboxImg" src="" alt="" style="max-width:90%; max-height:90vh; border-radius:8px; object-fit:contain; box-shadow:0 4px 32px rgba(0,0,0,0.5);">
-    </div>
-
     <script>
+        let selectedFiles = [];
+
         function openLightbox(src) {
             const lb = document.getElementById('imageLightbox');
             document.getElementById('lightboxImg').src = src;
@@ -178,8 +194,6 @@ requireRole('registrar');
             document.getElementById('lightboxImg').src = '';
         }
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-
-        let selectedFiles = [];
 
         // --- File Upload Helpers ---
         function handleDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('dragover'); }
@@ -220,7 +234,7 @@ requireRole('registrar');
 
         function getFileIcon(name) {
             const ext = name.split('.').pop().toLowerCase();
-            if (ext === 'pdf') return '📄';
+            if (['pdf'].includes(ext)) return '📄';
             if (['doc','docx'].includes(ext)) return '📝';
             if (['xls','xlsx'].includes(ext)) return '📊';
             if (['ppt','pptx'].includes(ext)) return '📊';
@@ -230,39 +244,33 @@ requireRole('registrar');
 
         function renderAttachments(attachments) {
             if (!attachments || attachments.length === 0) return '';
-            const items = attachments.map(att => {
+            return `<div class="announcement-attachment">` + attachments.map(att => {
                 if (att.type === 'image') {
                     const src = `../../uploads/announcements/${att.path.split('/').pop()}`;
-                    return `<div style="margin-top:0.5rem;">
-                        <img src="${src}" alt="${att.original_name}"
-                             onclick="openLightbox('${src}')"
-                             style="max-width:100%; max-height:300px; border-radius:8px; object-fit:contain; background:#f3f4f6; cursor:zoom-in; display:block;">
-                    </div>`;
+                    return `<img src="${src}" alt="${att.original_name}" onclick="openLightbox('${src}')" style="cursor:zoom-in;">`;
                 }
                 if (att.type === 'video') {
                     const src = `../../uploads/announcements/${att.path.split('/').pop()}`;
-                    return `<div style="margin-top:0.5rem;"><video src="${src}" controls style="max-width:100%; max-height:300px; border-radius:8px;"></video></div>`;
+                    return `<video src="${src}" controls></video>`;
                 }
                 const src = `../../uploads/announcements/${att.path.split('/').pop()}`;
-                return `<a href="${src}" target="_blank" download="${att.original_name}"
-                           style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:var(--background-main);border:1px solid #ddd;border-radius:8px;text-decoration:none;color:var(--text-primary);font-size:0.875rem;margin-top:0.5rem;">
-                    ${getFileIcon(att.original_name)} ${att.original_name}
-                </a>`;
-            }).join('');
-            return `<div style="margin-top:0.75rem;">${items}</div>`;
+                return `<a class="file-link" href="${src}" target="_blank" download="${att.original_name}">${getFileIcon(att.original_name)} ${att.original_name}</a>`;
+            }).join('') + `</div>`;
         }
 
+        // --- Load Announcements ---
         async function loadAnnouncements() {
             const target = document.getElementById('targetFilter').value;
             const params = target ? `?target=${target}` : '';
             
-            const response = await fetch(`../../api/registrar/get_announcements.php${params}`);
+            const response = await fetch(`../../api/admin/get_announcements.php${params}`);
             const data = await response.json();
             
             if (data.success) {
                 let html = '<div style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem;">';
                 data.announcements.forEach(a => {
                     const priorityColor = a.priority === 'high' ? 'var(--status-rejected)' : a.priority === 'medium' ? 'var(--status-pending)' : 'var(--text-secondary)';
+                    const attachmentsHtml = renderAttachments(a.attachments);
                     html += `
                         <div style="padding: 1.5rem; background: var(--background-main); border-radius: var(--radius-md); border-left: 4px solid ${priorityColor};">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
@@ -281,7 +289,7 @@ requireRole('registrar');
                                 </div>
                             </div>
                             <p style="margin: 0; color: var(--text-primary);">${a.content}</p>
-                            ${renderAttachments(a.attachments)}
+                            ${attachmentsHtml}
                         </div>
                     `;
                 });
@@ -333,7 +341,7 @@ requireRole('registrar');
 
         async function deleteAttachment(attachmentId) {
             if (!confirm('Remove this attachment?')) return;
-            const response = await fetch('../../api/registrar/delete_announcement_attachment.php', {
+            const response = await fetch('../../api/admin/delete_announcement_attachment.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ attachment_id: attachmentId })
@@ -361,7 +369,7 @@ requireRole('registrar');
             formData.append('priority', document.getElementById('priority').value);
             selectedFiles.forEach(f => formData.append('attachments[]', f));
 
-            const response = await fetch('../../api/registrar/save_announcement.php', { method: 'POST', body: formData });
+            const response = await fetch('../../api/admin/save_announcement.php', { method: 'POST', body: formData });
             const result = await response.json();
             if (result.success) { alert(result.message); closeModal(); loadAnnouncements(); } 
             else { alert('Error: ' + result.message); }
@@ -369,7 +377,7 @@ requireRole('registrar');
 
         async function deleteAnnouncement(id, title) {
             if (!confirm(`Delete "${title}"?`)) return;
-            const response = await fetch('../../api/registrar/delete_announcement.php', {
+            const response = await fetch('../../api/admin/delete_announcement.php', {
                 method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({announcement_id: id})
             });
             const result = await response.json();
@@ -383,6 +391,7 @@ requireRole('registrar');
     <script>
         (function() {
             var sidebar = document.querySelector('.sidebar');
+            // Scroll active nav item into view
             var saved = sessionStorage.getItem('sidebarScroll');
             if (saved) sidebar.scrollTop = parseInt(saved);
             // Save scroll position before navigating away
@@ -425,6 +434,9 @@ requireRole('registrar');
         });
     })();
     </script>
+<script src="../../js/pwa.js"></script>
+
+<!-- Mobile Bottom Navigation -->
     <script src="../../js/session-monitor.js"></script>
     <script src="../../js/apply-branding.js"></script>
 
@@ -432,16 +444,16 @@ requireRole('registrar');
       <a href="dashboard.php" class="mobile-nav-item" data-page="dashboard">
         <span class="mobile-nav-icon">📊</span><span>Home</span>
       </a>
-      <a href="applications.php" class="mobile-nav-item" data-page="applications">
-        <span class="mobile-nav-icon">📋</span><span>Apps</span>
+      <a href="users.php" class="mobile-nav-item" data-page="users">
+        <span class="mobile-nav-icon">👥</span><span>Users</span>
       </a>
-      <a href="manage_loads.php" class="mobile-nav-item" data-page="manage_loads">
-        <span class="mobile-nav-icon">📚</span><span>Loads</span>
+      <a href="sections.php" class="mobile-nav-item" data-page="sections">
+        <span class="mobile-nav-icon">📁</span><span>Sections</span>
       </a>
       <a href="announcements.php" class="mobile-nav-item" data-page="announcements">
         <span class="mobile-nav-icon">📢</span><span>Notices</span>
       </a>
-      <a href="profile.php" class="mobile-nav-item" data-page="profile">
+      <a href="account_settings.php" class="mobile-nav-item" data-page="account_settings">
         <span class="mobile-nav-icon">👤</span><span>Profile</span>
       </a>
     </nav>
@@ -456,5 +468,6 @@ requireRole('registrar');
     })();
     </script>
 
+<script src="../../js/enhancements.js"></script>
 </body>
 </html>

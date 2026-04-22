@@ -1,0 +1,6 @@
+[22-Apr-2026 08:57:31 Europe/Berlin] Update user request from admin ID: 1 - Data: {"name":"Jessa Montalvo","email":"registrar@gmail.com","role":"registrar","status":"active","student_id":"","course":"","year_level":"","department":"","office_location":"Main Building","office_hours":"","user_id":"3"}
+[22-Apr-2026 08:57:31 Europe/Berlin] Update SQL: UPDATE users SET name = ?, email = ?, role = ?, status = ?, student_id = ?, course = ?, year_level = ?, department = ?, office_location = ?, office_hours = ? WHERE id = ? with types: ssssssssssi
+[22-Apr-2026 08:57:31 Europe/Berlin] Successfully updated user ID: 3
+[22-Apr-2026 08:57:47 Europe/Berlin] Update user request from admin ID: 1 - Data: {"name":"Jessa Montalvo","email":"registrar@gmail.com","role":"registrar","status":"active","student_id":"","course":"","year_level":"","department":"Registrar Department","office_location":"Main Building","office_hours":"","user_id":"3"}
+[22-Apr-2026 08:57:47 Europe/Berlin] Update SQL: UPDATE users SET name = ?, email = ?, role = ?, status = ?, student_id = ?, course = ?, year_level = ?, department = ?, office_location = ?, office_hours = ? WHERE id = ? with types: ssssssssssi
+[22-Apr-2026 08:57:47 Europe/Berlin] Successfully updated user ID: 3

@@ -268,7 +268,7 @@ function renderAttachments(attachments) {
     if (!attachments || !attachments.length) return '';
     return '<div class="announcement-attachment">' + attachments.map(att => {
         const fname = att.path.split('/').pop();
-        const src   = '../uploads/announcements/' + fname;
+        const src   = '../../uploads/announcements/' + fname;
         if (att.type === 'image') return '<img src="' + src + '" alt="' + esc(att.original_name) + '" onclick="openLightbox(\'' + src + '\')">';
         if (att.type === 'video') return '<video src="' + src + '" controls></video>';
         return '<a class="file-link" href="' + src + '" target="_blank" download="' + esc(att.original_name) + '">' + getFileIcon(att.original_name) + ' ' + esc(att.original_name) + '</a>';
@@ -345,7 +345,7 @@ function editAnnouncement(a) {
     const existingDiv = document.getElementById('existingAttachments');
     if (a.attachments && a.attachments.length) {
         existingDiv.innerHTML = a.attachments.map(att => {
-            const src = '../uploads/announcements/' + att.path.split('/').pop();
+            const src = '../../uploads/announcements/' + att.path.split('/').pop();
             const preview = att.type === 'image' ? '<img src="' + src + '" alt="' + esc(att.original_name) + '">' : '<span>' + getFileIcon(att.original_name) + '</span>';
             return '<div class="existing-attachment">' + preview + '<span style="flex:1;">' + esc(att.original_name) + '</span></div>';
         }).join('');

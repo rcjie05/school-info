@@ -61,7 +61,7 @@ if ($_col_check && $_col_check->fetch_assoc()['cnt'] == 0) {
 // Handle uploaded files
 $uploadedFiles = [];
 if ($isMultipart && !empty($_FILES['attachments']['name'][0])) {
-    $uploadDir = __DIR__ . '/../../../uploads/announcements/';
+    $uploadDir = __DIR__ . '/../../uploads/announcements/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
     $totalFiles = count($_FILES['attachments']['name']);

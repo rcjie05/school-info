@@ -43,7 +43,7 @@ if (!$att) {
 }
 
 // Delete the physical file
-$projectRoot = dirname(__DIR__, 3);
+$projectRoot = dirname(__DIR__, 2);
 $filePath    = $projectRoot . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $att['file_path']);
 if (file_exists($filePath)) {
     @unlink($filePath);
