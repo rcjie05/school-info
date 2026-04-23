@@ -313,7 +313,7 @@ $_initials   = strtoupper(substr($_avatar_user['name'] ?? '?', 0, 1));
                             <div style="font-size:0.82rem; color:rgba(255,255,255,0.7);" id="enrollmentBannerSub">Submit your enrollment for the current semester.</div>
                         </div>
                     </div>
-                    <a id="enrollNowBtn" href="../enrollment.html" style="
+                    <a id="enrollNowBtn" href="../../enrollment.html" style="
                         display: inline-flex;
                         align-items: center;
                         gap: 0.4rem;
@@ -430,7 +430,7 @@ $_initials   = strtoupper(substr($_avatar_user['name'] ?? '?', 0, 1));
                         <div><strong>Enrollment is open.</strong> Complete all 5 steps of the form below to submit your application.</div>
                     </div>
                     <iframe
-                        src="../enrollment.html"
+                        src="../../enrollment.html"
                         class="enroll-frame"
                         title="Student Enrollment Form"
                         loading="lazy"
@@ -504,12 +504,12 @@ $_initials   = strtoupper(substr($_avatar_user['name'] ?? '?', 0, 1));
                         });
                         const enrollBtn = document.getElementById('enrollNowBtn');
                         if (enrollBtn) {
-                            enrollBtn.href = '../enrollment.html?' + params.toString();
+                            enrollBtn.href = '../../enrollment.html?' + params.toString();
                         }
                         // Also update iframe src if enrollment section is showing
                         const enrollFrame = document.querySelector('.enroll-frame');
                         if (enrollFrame) {
-                            enrollFrame.src = '../enrollment.html?' + params.toString();
+                            enrollFrame.src = '../../enrollment.html?' + params.toString();
                         }
                     } else {
                         banner.style.display = 'none';

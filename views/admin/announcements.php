@@ -479,7 +479,7 @@ requireRole('admin');
                             </div>
                             <div class="fb-post-menu">
                                 <button class="fb-menu-btn" onclick='editAnnouncement(${safeData})' title="Edit">✏️</button>
-                                <button class="fb-menu-btn" onclick="deleteAnnouncement(${a.id},'${a.title.replace(/'/g,"\\'")}')​" title="Delete">🗑️</button>
+                                <button class="fb-menu-btn" onclick="deleteAnnouncement(${a.id},'${a.title.replace(/'/g,"\\'")}')" title="Delete">🗑️</button>
                             </div>
                         </div>
                         ${a.title ? `<div class="fb-post-title">${a.title}</div>` : ''}

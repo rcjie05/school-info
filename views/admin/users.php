@@ -570,9 +570,14 @@ async function loadUsers() {
                 suspInfo = `<span style="color:var(--status-rejected);font-size:0.75rem;">Permanent</span>`;
             }
 
-            const suspBtn = isSuspendable
-                ? `<button class="btn-action btn-suspend" onclick="openSuspensionModal(${user.id},'${user.name.replace(/'/g,"\\'")}','${user.role}')">⏸ Suspend</button>`
-                : `<button class="btn-action btn-activate" onclick="activateUser(${user.id},'${user.name.replace(/'/g,"\\'")}')">✅ Activate</button>`;
+            let suspBtn;
+            if (isSuspendable) {
+                suspBtn = `<button class="btn-action btn-suspend" onclick="openSuspensionModal(${user.id},'${user.name.replace(/'/g,"\\\\'")}','${user.role}')">⏸ Suspend</button>`;
+            } else if (user.status === 'pending') {
+                suspBtn = `<button class="btn-action btn-activate" onclick="approveUser(${user.id},'${user.name.replace(/'/g,"\\\\'")}')">✅ Approve</button>`;
+            } else {
+                suspBtn = `<button class="btn-action btn-activate" onclick="activateUser(${user.id},'${user.name.replace(/'/g,"\\\\'")}')">✅ Activate</button>`;
+            }
 
             html += `<tr>
                 <td>${user.name}</td>
@@ -696,6 +701,17 @@ async function activateUser(userId, userName) {
         if (result.success) { showToast(result.message); loadUsers(); }
         else showToast(result.message, 'error');
     } catch(e) { showToast('Failed to activate user.', 'error'); }
+}
+
+async function approveUser(userId, userName) {
+    const ok = await sccConfirm({ title: 'Approve Student', message: `Approve <strong>${userName}</strong> and grant them access?`, type: 'info', confirmText: '✅ Approve' });
+    if (!ok) return;
+    try {
+        const res    = await fetch('../../api/admin/toggle_user_status.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({user_id: userId, status: 'approved'}) });
+        const result = await res.json();
+        if (result.success) { showToast('Student approved successfully.'); loadUsers(); }
+        else showToast(result.message, 'error');
+    } catch(e) { showToast('Failed to approve student.', 'error'); }
 }
 
 async function deleteUser(userId, userName) {
