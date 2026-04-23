@@ -226,7 +226,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbo
 function renderAttachments(attachments) {
     if (!attachments || !attachments.length) return '';
     const items = attachments.map(att => {
-        const src = `../uploads/feedback/${att.path.split('/').pop()}`;
+        const src = `../../uploads/feedback/${att.path.split('/').pop()}`;
         if (att.type === 'image') return `<img src="${src}" alt="${esc(att.original_name)}" onclick="openLightbox('${src}')">`;
         if (att.type === 'video') return `<video src="${src}" controls></video>`;
         return `<a class="file-link" href="${src}" target="_blank" download="${esc(att.original_name)}">${getFileIcon(att.original_name)} ${esc(att.original_name)}</a>`;

@@ -5,7 +5,7 @@
     Require all denied
 </FilesMatch>
 
-# Only allow safe image/document file types to be served
-<FilesMatch "\.(jpg|jpeg|png|gif|webp|pdf|doc|docx)$">
+# Allow safe image, video, audio, and document file types to be served
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|pdf|doc|docx|xls|xlsx|ppt|pptx|txt|zip|rar|mp4|mov|avi|webm|mkv|mp3|wav|ogg)$">
     Require all granted
 </FilesMatch>

@@ -182,7 +182,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbo
 function renderFeedbackAttachments(attachments) {
     if (!attachments || !attachments.length) return '';
     const items = attachments.map(att => {
-        const src = `../uploads/feedback/${att.path.split('/').pop()}`;
+        const src = `../../uploads/feedback/${att.path.split('/').pop()}`;
         if (att.type === 'image') return `<img src="${src}" alt="${esc(att.original_name)}" onclick="openLightbox('${src}')" style="max-width:100%;max-height:220px;border-radius:8px;object-fit:contain;cursor:zoom-in;display:block;margin-top:0.4rem;background:#f3f4f6;">`;
         if (att.type === 'video') return `<video src="${src}" controls style="max-width:100%;max-height:220px;border-radius:8px;display:block;margin-top:0.4rem;"></video>`;
         return `<a href="${src}" target="_blank" download="${esc(att.original_name)}" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.85rem;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;text-decoration:none;color:var(--text-primary);font-size:0.82rem;margin-top:0.4rem;">${getFileIcon(att.original_name)} ${esc(att.original_name)}</a>`;

@@ -60,7 +60,7 @@ $feedback_id = $conn->insert_id;
 
 // Handle uploaded files
 if ($isMultipart && !empty($_FILES['attachments']['name'][0])) {
-    $uploadDir = dirname(__DIR__, 3) . '/uploads/feedback/';
+    $uploadDir = dirname(__DIR__, 2) . '/uploads/feedback/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
     $allowed = ['jpg','jpeg','png','gif','webp','mp4','mov','avi','webm','mkv','pdf','doc','docx','xls','xlsx','ppt','pptx','txt','zip','rar'];

@@ -929,10 +929,7 @@ function printEnrollmentForm(){
     try {
       Array.from(sheet.cssRules).forEach(rule => {
         if (rule instanceof CSSMediaRule && rule.conditionText === 'print') {
-          // Unwrap @media print { ... } — use inner rules directly since this window is print-only
-          Array.from(rule.cssRules).forEach(inner => {
-            printCSS += inner.cssText + '\n';
-          });
+          Array.from(rule.cssRules).forEach(inner => { printCSS += inner.cssText + '\n'; });
         } else {
           printCSS += rule.cssText + '\n';
         }
